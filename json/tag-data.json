@@ -1,4 +1,5 @@
 {
+  "java": 2,
   "ai": 2,
   "mcp": 1,
   "llm": 2,
@@ -6,8 +7,8 @@
   "ollama": 1,
   "dify": 1,
   "pen": 1,
-  "java": 1,
-  "sec": 1,
+  "sec": 2,
+  "php": 1,
   "javascript": 4,
   "typescript": 2,
   "string": 1,
