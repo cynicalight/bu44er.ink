@@ -1,6 +1,6 @@
 {
-  "name": "mengke.me",
-  "version": "2.0.0",
+  "name": "bu44er.ink",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "start": "next dev",
