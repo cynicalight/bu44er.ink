@@ -26,6 +26,6 @@ export const AUTHOR_INFO = {
     juejin: '/',
   },
   support: {
-    kofi: 'https://ko-fi.com/mengke',
+    kofi: 'https://ko-fi.com/bu44er',
   },
 }

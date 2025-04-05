@@ -41,24 +41,23 @@ export function TypedBios() {
       ])}
     >
       <ul id="bios" className="hidden">
-        <li>
+        {/* <li>
           I'm aliased as <span className="font-medium">Xiaoke</span> at work.
-        </li>
+        </li> */}
         <li>I'm a learner, builder, and freedom seeker.</li>
         <li>
-          I live in <b className="font-medium">Peiping, China</b>.
+          I live in <b className="font-medium">Shanghai, China</b>.
         </li>
         <li>
-          I was born in the beautiful <b className="font-medium">Mount Tai</b>.
+          I was born in the beautiful <b className="font-medium">Shanghai</b>.
         </li>
         <li>
-          My first programming language I learned was <b className="font-medium">Javascript</b>.
+          My first programming language I learned was <b className="font-medium">C on Arduino</b>.
         </li>
         <li>I love web development.</li>
-        <li>I work mostly with JS/TS technologies.</li>
-        <li>I'm Chou's husband.</li>
+        <li>I work mostly with Python.</li>
         <li>
-          I'm a cat-person. <Twemoji emoji="cat" />
+          I'm a dog-person. <Twemoji emoji="dog" />
         </li>
         <li>
           I'm a sport-guy. I love

