@@ -1,12 +1,12 @@
-<h1 align="center">mengke.me 🧑‍💻</h1>
+<h1 align="center">bu44er.ink 🧑‍💻</h1>
 
 <div align="center">
 
-[English](./README.md) | [繁体中文](./README_zh-TW.md) | [日本語](./README_ja.md)
+[English](./README.md)
 
 </div>
 
-<img style="border-radius: 6px" src="./public/static/images/home_page.webp">
+<img style="border-radius: 6px" src="./public/static/images/home_page.png">
 
 ## 动机
 
@@ -60,5 +60,7 @@
 4. 每篇博文的阅读量会被自动统计到这个数据库中。
 
 ## ☕️ 支持 Mengke
+
+感谢原作者：[Mengke](https://github.com/mengke)
 
 <a href='https://ko-fi.com/P5P2ZV7NP' target='_blank'><img height='50' style='border:0px;height:50px;' src='https://storage.ko-fi.com/cdn/kofi2.png?v=3' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
