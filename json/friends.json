@@ -22,44 +22,9 @@
   },
   {
     "type": "friend",
-    "name": "沉舟侧畔 Blog",
-    "slogan": "沉舟侧畔，有千帆竞发。病树前头，正万木争荣。新生的力量，生机勃勃，势不可当。",
-    "imgSrc": "/static/images/friends/springwood.jpeg",
-    "url": "https://springwood.me/?ref=mengke.me"
-  },
-  {
-    "type": "friend",
-    "name": "Chaoszhu'Blog",
-    "slogan": "好记性不如烂笔头~",
-    "imgSrc": "/static/images/friends/chaoszhu.png",
-    "url": "https://chaoszhu.com/?ref=mengke.me"
-  },
-  {
-    "type": "friend",
-    "name": "NoOne",
-    "slogan": "NoOne，一位对技术充满热情的软件架构师",
-    "imgSrc": "/static/images/friends/NoOne.webp",
-    "url": "https://www.ifb.me/?ref=mengke.me"
-  },
-  {
-    "type": "friend",
-    "name": "搬砖日记",
-    "slogan": "我的生活记录",
-    "imgSrc": "/static/images/friends/banzhuanriji.svg",
-    "url": "https://banzhuanriji.com/?ref=mengke.me"
-  },
-  {
-    "type": "techStar",
-    "name": "Anthony Fu",
-    "slogan": "Anthony Fu, a fanatical open sourceror.",
-    "imgSrc": "/static/images/friends/antfu.png",
-    "url": "https://antfu.me/?ref=mengke.me"
-  },
-  {
-    "type": "techStar",
-    "name": "Surmon",
-    "slogan": "本是浪蝶游蜂，自留半亩石池，但求直抒胸臆，挥墨九云之中",
-    "imgSrc": "/static/images/friends/surmon.jpeg",
-    "url": "https://surmon.me/?ref=mengke.me"
+    "name": "JFS's Blog",
+    "slogan": "cherish what we've got_",
+    "imgSrc": "/",
+    "url": "https://jfsas.github.io/"
   }
 ]
