@@ -1,0 +1,64 @@
+---
+title: Python项目找不到自定义module
+date: 2025-04-08
+tags:
+  - PYTHON
+draft: false
+images: ['/static/images/blog/2025/400534/Pasted%20image%2020250408014336.png']
+authors: ['default']
+---
+
+## WHAT IS MODULE
+
+module 模块：module 是 python 中代码重用的基本单元，一个 module 可以通过 `import` 语句导入到另一个 module。
+
+module 分为：
+
+1. `pure python module`（纯 python 模块）
+2. `extension module`（扩展模块）
+3. `package`（包）
+
+## 报错
+
+报错belike：
+
+```bash
+ModuleNotFoundError: No module named 'open_r1.rewards'
+```
+
+目录如下：
+
+![](/static/images/blog/2025/400534/Pasted%20image%2020250408014336.png)
+
+## Meth 1. setup.py
+
+一般好的项目的根目录会有这样一个setup.py设置packagedir（和一些其他依赖等等）：
+
+```python
+from setuptools import find_packages, setup
+
+setup(
+    # 包名到目录的映射
+    # ""表示顶层包
+    # 映射到src文件夹
+    package_dir={"": "src"},
+
+    packages=find_packages("src"),
+)
+```
+
+- **全局性**：通过 `setup.py` 脚本安装包之后，Python 会记住这个包的安装位置，后续在任何目录下/任何 Python 进程中都能找到这个包（都能import）。
+
+## Meth 2. sys.path
+
+```python
+import sys
+
+sys.path.append('/home/zhangjie/openr1-gpu04/src')
+```
+
+- **动态性**：仅在当前 Python 进程运行期间有效。一旦 Python 进程结束，这个路径设置就会失效。
+
+## REF
+
+- [Python 包构建教程 - cposture - 博客园](https://www.cnblogs.com/cposture/p/9029023.html#_label0)
