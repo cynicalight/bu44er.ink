@@ -56,3 +56,5 @@ yarn-error.log*
 scripts/imdb-movies.csv
 
 update.sh
+remove.sh
+push.sh

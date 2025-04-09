@@ -1,4 +1,6 @@
 {
+  "default": 1,
+  "python": 1,
   "cs": 1,
   "pen": 1,
   "java": 3,

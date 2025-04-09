@@ -1,0 +1,159 @@
+---
+title: Machine Learning on Lee
+date: 2025-04-09
+tags:
+  - default
+draft: false
+images: ['/static/images/blog/2025/ML-lee/Pasted%20image%2020250409010004.png']
+authors: ['default']
+---
+
+---
+
+cssclasses:
+
+- smalli
+  number headings: auto, first-level 1, max 6, 1.1
+
+---
+
+- [ML 2022 Spring](https://speech.ee.ntu.edu.tw/~hylee/ml/2022-spring.php)
+- [GitHub - datawhalechina/leedl-tutorial](https://github.com/datawhalechina/leedl-tutorial)
+
+# 1 ML Framework
+
+target: **looking for function**
+
+1. function with unknown
+2. define loss
+3. optimization
+
+## 1.1 function with unknown
+
+Hard Sigmoid 是常见的目标 function。
+
+- 可以用 Sigmoid Function 逼近 Hard Sigmoid
+
+![](/static/images/blog/2025/ML-lee/Pasted%20image%2020250329201159.png)
+
+多个 sigmoid 合成 red curve
+
+![](/static/images/blog/2025/ML-lee/Pasted%20image%2020250329232523.png)
+
+最终的 function with unknown
+
+![](/static/images/blog/2025/ML-lee/Pasted%20image%2020250329233420.png)
+
+## 1.2 loss
+
+![](/static/images/blog/2025/ML-lee/Pasted%20image%2020250330092849.png)
+
+## 1.3 optimize
+
+不断更新 gradient
+
+![](/static/images/blog/2025/ML-lee/Pasted%20image%2020250330092745.png)
+
+总的数据集会分成很多 batch：
+
+- 遍历所有batch称为一次epoch
+- update指更新一次batch
+
+![](/static/images/blog/2025/ML-lee/Pasted%20image%2020250330093114.png)
+
+## 1.4 more layers
+
+可以把模型进一步改成多层：
+
+![](/static/images/blog/2025/ML-lee/Pasted%20image%2020250330102015.png)
+
+每一层都是一个 Sigmoid 或 ReLU 的 function，称为神经元（neuron），很多的神经元称为神经网络 （neural network）。
+
+神经网络不是新的技术，80、90 年代就已经用过了，后来为了要重振神经网络的雄风，所以需要新的名字。每一层，称为隐藏层（hidden layer），很多的隐藏层就“深”，这套技术称为**深度学习**。
+
+但是层数不一定越深越好，可能会出现过拟合 overfitting 的问题：
+
+![](/static/images/blog/2025/ML-lee/Pasted%20image%2020250330102509.png)
+
+---
+
+# 2 General Guidance
+
+![](/static/images/blog/2025/ML-lee/Pasted%20image%2020250406124453.png)
+
+## 2.1 model bias
+
+假设模型过于简单，一个有未知参数的函数代 θ1 得到一个函数 fθ1(x)，同理可得到另一个函数 fθ2(x)，把所有的函数集合起来得到一个函数的集合。但是该函数的集合太小了，没有包含任何一个函数，可以让损失变低的函数不在模 型可以描述的范围内。在这种情况下，就算找出了一个 θ∗ ，虽然它是这些蓝色的函数里面最好的一个，但损失还是不够低。
+
+![](/static/images/blog/2025/ML-lee/Pasted%20image%2020250406132016.png)
+
+## 2.2 optimization
+
+一般只会用到梯度下降进行优化，这种优化的方法很多的问题。比如(a)可能会卡在局部最小值的地方，无法找到一个真的可以让损失很低的参数。
+
+![](/static/images/blog/2025/ML-lee/Pasted%20image%2020250406132147.png)
+
+## 2.3 overfitting
+
+过拟合的表现为：训练数据上面的损失小，测试数据上的损失大。
+
+例子：模型过于灵活
+
+在这 3 个蓝点（训练数据）上面，要让损失低，所以模型的这个曲线会通过这 3 个点，但是其它没有训练集做为限制的地方，因为它的灵活性很大，所以模型可以变成各式各样的函数，没有给它数据做为训练，可以产生各式各样奇怪的结果（“随意”）。
+
+最终，表现为训练数据loss为0，测试数据loss很大。
+
+![](/static/images/blog/2025/ML-lee/Pasted%20image%2020250406140220.png)
+
+可以用数据增强和限制模型的方法，降低 overfitting
+
+### 2.3.1 data augmentation 数据增强
+
+根据问题的理解创造出新的数据。举个例子，在做图像识别的时候，常做的 一个招式是，假设训练集里面有某一张图片，把它左右翻转，或者是把它其中一块截出来放大 等等。
+
+### 2.3.2 限制模型
+
+让模型不要有过大的灵活性。
+
+- 减少模型参数：对于神经网络，可以减少每层的参数
+- 减少数据特征值
+- 早停（early stopping）、正则化（regularization）和丢弃法（dropout method）
+
+## 2.4 cross validation
+
+交叉验证 Cross Validation 是为了避免在测试集上面过拟合。
+
+k 折交叉验证就是先把训练集切成 k 等份。在这个例子，训练集被切成 3 等份，切完以后，拿其中一份当作验证集，另外两份当训练集。
+
+- 这件事情要重复 3 次：第一份第 2 份当训练，第 3 份当验证；第一份第 3 份当训练，第 2 份当验证；第 1 份当验证，第 2 份第 3 份当训练。
+
+![](/static/images/blog/2025/ML-lee/Pasted%20image%2020250408204230.png)
+
+## 2.5 mismatch
+
+不匹配，简单理解就是一种反常的情况发生了。
+
+![](/static/images/blog/2025/ML-lee/Pasted%20image%2020250408234008.png)
+
+而且，增加数据也不能让模型做得更好，**到底有没有mismatch，要看人对数据本身的理解**。
+
+---
+
+# 3 Deep Learning Basics
+
+## 3.1 local minima and saddle point
+
+1. local minima 是局部极小值
+2. saddle point 是鞍点，不是极小，可以向其他方向 escape
+
+![](/static/images/blog/2025/ML-lee/Pasted%20image%2020250409010004.png)
+
+### 3.1.1 判断临界值种类的方法
+
+损失函数可由于泰勒级数近似为：
+
+$$
+L({\theta}) \approx L\left({\theta}'\right) + \left({\theta} - {\theta}'\right)^{\mathrm{T}} {g} + \frac{1}{2} \left({\theta} - {\theta}'\right)^{\mathrm{T}} {H} \left({\theta} - {\theta}'\right)
+$$
+
+其中，H 里面放的是 L 的二次微分，可以通过 $\frac{1}{2} \left({\theta} - {\theta}'\right)^{\mathrm{T}} {H} \left({\theta} - {\theta}'\right)$ 的正负判断是否是极小值。

