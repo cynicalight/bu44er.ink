@@ -10,8 +10,8 @@ export const AUTHOR_INFO = {
     timeZone: 8,
   },
   work: {
-    company: '',
-    occupation: 'Safety Engineer',
+    company: 'Wuhan University',
+    occupation: 'student',
     location: 'Wuhan, China',
     website: '/',
   },
