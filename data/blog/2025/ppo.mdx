@@ -1,11 +1,11 @@
 ---
-title: PPO论文笔记
-description: 近端策略优化算法PPO论文笔记
-summary: 近端策略优化算法PPO论文笔记
+title: PPO: Proximal Policy Optimization Algorithms 近端策略优化算法
+summary: PPO Proximal Policy Optimization Algorithms 论文学习笔记
 date: 2025-04-13
 tags:
-  - LLM
-  - RL
+    - LLM
+    - RL
+    - PAPER
 draft: false
 images: ['/static/images/blog/2025/ppo/Pasted%20image%2020250413154243.png']
 authors: ['default']
@@ -57,9 +57,14 @@ $$
 
 - $\epsilon$是超参数，常取$0.2$
 
-重点在于裁剪函数 $\text{clip}(r_t(\theta),1 - \epsilon,1 + \epsilon)$，它将概率比率 $r_t(\theta)$ 限制在 $[1 - \epsilon,1 + \epsilon]$ 区间内 - 如果 $r_t(\theta)$ 小于$1 - \epsilon$ ，则裁剪为$1 - \epsilon$；大于$1 + \epsilon$ ，则裁剪为$1 + \epsilon$ ；**在区间内则保持不变**，只有超出限制才会起作用。
+重点在于裁剪函数 $\text{clip}(r_t(\theta),1 - \epsilon,1 + \epsilon)$，它将概率比率 $r_t(\theta)$ 限制在 $[1 - \epsilon,1 + \epsilon]$ 区间内 - 如果 $r_t(\theta)$ 超出区间端点，则裁剪为duan端点；**在区间内则保持不变**
 
-$L^{CLIP}(\theta)$中，$\min$函数内第一项就是 TRPO 中的目标函数 $L^{CPI}$ 。第二项通过裁剪概率比率来修改替代目标函数，限制了 $r_t(\theta)$ 无法超出$[1 - \epsilon,1 + \epsilon]$区间。之后再取两者最小值，使得 $L^{CLIP}(\theta)$ 成为未裁剪目标函数 $L^{CPI}$ 的下限，即一个 pessimistic 的界限。
+$L^{CLIP}(\theta)$ 的 min 函数中：
+
+- 参数一是 **TRPO** 中的目标函数 $L^{CPI}$
+- 参数二是代入裁剪过的概率比率的目标函数
+
+取两者最小值，使得 $L^{CLIP}(\theta)$ 成为未裁剪目标函数 $L^{CPI}$ 的下限，即文中提到的 pessimistic 的界限。
 
 ![](/static/images/blog/2025/ppo/Pasted%20image%2020250413152733.png)
 
@@ -76,11 +81,11 @@ $$L^{PENALTY}(\theta)=\hat{\mathbb{E}}_{t}\left[r_{t}(\theta) \hat{A}_{t}-\beta 
 
 ## 实现
 
-PPO算法的实现步骤如下：
+PPO算法的具体实现步骤如下：
 
 1. **数据采样**：使用当前策略$\pi_{\theta}$与环境进行交互，收集一批轨迹数据$\{(s_t, a_t, r_t)\}$，其中$s_t$是状态，$a_t$是动作，$r_t$是奖励。
 2. **优势估计**：计算每个时间步的优势函数估计值$\hat{A}_{t}$。常见的方法有广义优势估计（Generalized Advantage Estimation，GAE）等。
-3. **目标函数优化**：根据选定的目标函数（如$L^{CLIP}$或$L^{PENALTY}$），使用随机梯度上升算法对策略参数$\theta$进行多轮次（多个epoch）的小批量更新。例如，对于PPO - CLIP，通过最大化$L^{CLIP}(\theta)$来更新$\theta$。
+3. **目标函数优化**：根据选定的目标函数（如$L^{CLIP}$或$L^{PENALTY}$），使用随机梯度上升算法对策略参数$\theta$进行多轮次（多个epoch）的小batch更新。例如，对于PPO中的CLIP方法，通过最大化$L^{CLIP}(\theta)$来更新$\theta$。
 4. **参数更新**：在完成对采样数据的多轮优化后，更新策略参数$\theta$，并重复上述步骤进行下一轮的采样和优化。
 
 ## 优势
@@ -88,7 +93,7 @@ PPO算法的实现步骤如下：
 PPO算法具有以下显著优势：
 
 1. **实现简单**：相较于TRPO，PPO无需复杂的二阶优化方法（如共轭梯度算法），仅使用一阶优化（如随机梯度上升），降低了实现难度和计算复杂度。
-2. **数据效率高**：通过使用裁剪概率比率或KL散度惩罚项，PPO能够在有限的样本数据上进行有效的策略更新，避免了策略更新幅度过大导致的性能波动，提高了数据的利用效率。
+2. **数据效率高**：通过 clipped 或 KL散度惩罚项 的方法，PPO能够在有限的样本数据上进行有效的策略更新，避免了策略更新幅度过大导致的性能波动，提高了数据的利用效率。
 3. **通用性强**：PPO适用于各种不同的强化学习任务，包括连续控制任务和离散动作空间任务（如Atari游戏）。在实验中，它在多个基准任务上表现出色，能够在不同的环境中取得较好的性能。
 4. **样本复杂度低**：与其他在线策略梯度方法相比，PPO在较少的样本数量下就能达到较好的性能，减少了与环境交互的次数，从而节省了训练时间和资源。
 
