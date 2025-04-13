@@ -1,0 +1,60 @@
+---
+title: '国内访问 Vercel 部署应用'
+summary: '国内访问 Vercel 部署应用'
+date: 2025-04-13
+tags:
+  - OTHERS
+draft: false
+images: ['/static/images/blog/2025/vercel-gfw/Pasted%20image%2020250413211315.png']
+authors: ['default']
+---
+
+- Vercel 自2021年开始在国内被墙，Vercel 上部署的网站无法国内访问
+
+## 解决方案
+
+1. 首先你需要一个自定义的域名，国内有腾讯云阿里云这种域名提供商
+2. 修改国内域名提供商的 DNS 解析网站，将 DNS 解析转移到 Cloudflare
+3. 在 Cloudflare 上配置 DNS 解析：解析自定义域名到 Vercel 部署的域名
+
+## 实操
+
+自定义域名随便买一个即可。
+
+注册 Cloudflare，首页点击加一个域名，我这已经加好了：
+
+![](/static/images/blog/2025/vercel-gfw/Pasted%20image%2020250413205849.png)
+
+然后选择计划，直接 free：
+![](/static/images/blog/2025/vercel-gfw/Pasted%20image%2020250413210100.png)
+
+重点：Cloudflare 会生成两个 DNS 服务器域名，这两个域名要用
+
+![](/static/images/blog/2025/vercel-gfw/Pasted%20image%2020250413210417.png)
+
+在国内域名解析控制台，找到 DN S修改的选项，我用的是阿里云，在左侧菜单：
+
+![](/static/images/blog/2025/vercel-gfw/Pasted%20image%2020250413210602.png)
+
+点击修改，填入刚才 Cloudflare 提供的两个 DNS 域名服务器，我这里已经填过了：
+
+![](/static/images/blog/2025/vercel-gfw/Pasted%20image%2020250413210726.png)
+
+去 Cloudflare 添加 DNS解析，如果你之前在配置过国内域名解析，Cloudflare 这里是会自动继承的：
+
+![](/static/images/blog/2025/vercel-gfw/Pasted%20image%2020250413210948.png)
+
+Vercel project 里面的 domain 设置一下：
+
+![](/static/images/blog/2025/vercel-gfw/Pasted%20image%2020250413211151.png)
+
+最后需要在 Cloudflare 中设置一下 SSL，避免多次重定向的问题：
+![](/static/images/blog/2025/vercel-gfw/Pasted%20image%2020250413211245.png)
+
+选择 full strict：
+
+![](/static/images/blog/2025/vercel-gfw/Pasted%20image%2020250413211315.png)
+
+## REF
+
+- [如何在国内访问vercel部署应用？我个人觉得vercel是做前端的大家都应该去了解并且掌握的一个非常方便的部署工具，能 - 掘金](https://juejin.cn/post/7301193497247727652)
