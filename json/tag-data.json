@@ -1,16 +1,12 @@
 {
-  "java": 3,
-  "sec": 8,
-  "php": 2,
-  "cs": 1,
-  "python": 1,
-  "ml": 1,
   "llm": 2,
   "rl": 1,
   "paper": 1,
-  "javascript": 1,
-  "typescript": 1,
-  "string": 1,
-  "casing": 1,
-  "utilities": 1
+  "others": 1,
+  "ml": 1,
+  "python": 1,
+  "cs": 1,
+  "sec": 8,
+  "java": 3,
+  "php": 2
 }

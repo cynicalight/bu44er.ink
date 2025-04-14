@@ -57,6 +57,17 @@ You can see what the blog looks like here: <https://mengke.me>
 
 4. The number of views of each blog post will be automatically counted in this database.
 
+## Settings
+
+if you want to add some twemoji, you can add the following code to your `css/twemoji.css` file:
+
+```css
+/* ❤️‍🩹 mending heart */
+.twa-mending-heart {
+  background-image: url('https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/2764-fe0f-200d-1fa79.svg');
+}
+```
+
 ## ☕️ Support Mengke
 
 Thanks to the original author: [Mengke](https://github.com/mengke)
