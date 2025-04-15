@@ -1,0 +1,49 @@
+---
+title: 'Overleaf的引用及参考文献'
+summary: 'Overleaf的引用及参考文献'
+date: 2025-04-15
+tags:
+  - others
+draft: false
+images: ['/static/images/blog/2025/overleaf-cite/Pasted%20image%2020250415183416.png']
+authors: ['default']
+---
+
+- 默认项目是IEEE的模板，无关文件忽略即可
+
+创建一个 `.bib` 文件，文件名随意：
+
+![](/static/images/blog/2025/overleaf-cite/Pasted%20image%2020250415182604.png)
+
+在 google scholar 找到论文，选择 bibtex 格式的引用，点击即复制：
+
+![](/static/images/blog/2025/overleaf-cite/Pasted%20image%2020250415182946.png)
+
+粘贴到 bib 文件：
+
+![](/static/images/blog/2025/overleaf-cite/Pasted%20image%2020250415183030.png)
+
+接下来在正文任意位置引用：
+
+```latex
+\cite{sun2023aligning}
+```
+
+![](/static/images/blog/2025/overleaf-cite/Pasted%20image%2020250415183246.png)
+
+最后在 reference section 写入：
+
+```latex
+% 格式
+\bibliographystyle{IEEEtran}
+% bib文件
+\bibliography{bibtex/bib/ref}
+```
+
+![](/static/images/blog/2025/overleaf-cite/Pasted%20image%2020250415183357.png)
+
+成功显示：
+
+![](/static/images/blog/2025/overleaf-cite/Pasted%20image%2020250415183416.png)
+
+注意，**结尾的 reference section 中只会出现你在前文中 cite 过的文献**，如果在正文中没有 cite 过某文献，即使写到 bib 文件里，也是不会在结尾显示的。
