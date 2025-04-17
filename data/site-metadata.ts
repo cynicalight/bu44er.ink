@@ -8,7 +8,7 @@ export const SITE_METADATA = {
   theme: 'system', // system, dark or light
   siteUrl: 'https://www.bu44er.ink',
   siteRepo: 'https://github.com/cynicalight/bu44er.ink',
-  siteLogo: `${process.env.BASE_PATH || ''}/static/images/profile.webp`,
+  siteLogo: `${process.env.BASE_PATH || ''}/static/images/nikon11.webp`,
   socialBanner: `${process.env.BASE_PATH || ''}/static/images/twitter-card.jpeg`,
 
   locale: 'en-US',

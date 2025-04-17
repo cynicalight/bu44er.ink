@@ -16,7 +16,7 @@ export function Logo({ className }: { className?: string }) {
       ])}
     >
       <Image
-        src="/static/images/logo.webp"
+        src="/static/images/nikon11.webp"
         alt={SITE_METADATA.headerTitle}
         width={100}
         height={100}
