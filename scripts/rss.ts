@@ -1,10 +1,10 @@
-import type { Blog, Snippet } from 'contentlayer/generated'
+import type { Gallery, Blog, Snippet } from 'contentlayer/generated'
 import { mkdirSync, writeFileSync } from 'fs'
 import { slug } from 'github-slugger'
 import path from 'path'
 import { sortPosts } from 'pliny/utils/contentlayer'
 import { escape } from 'pliny/utils/htmlEscaper'
-import { allBlogs, allSnippets } from '~/.contentlayer/generated/index.mjs'
+import { allBlogs, allSnippets, allGalleries } from '~/.contentlayer/generated/index.mjs'
 import { AUTHOR_INFO } from '~/data/author-info'
 import { SITE_METADATA } from '~/data/site-metadata'
 import tagData from '~/json/tag-data.json' assert { type: 'json' }
@@ -12,9 +12,10 @@ import mime from 'mime'
 
 const blogs = allBlogs as unknown as Blog[]
 const snippets = allSnippets as unknown as Snippet[]
+const galleries = allGalleries as unknown as Gallery[]
 const RSS_PAGE = 'feed.xml'
 
-function generateRssItem(item: Blog | Snippet) {
+function generateRssItem(item: Blog | Snippet | Gallery) {
   const { siteUrl, author } = SITE_METADATA
   const { email } = AUTHOR_INFO
   return `
@@ -32,8 +33,22 @@ function generateRssItem(item: Blog | Snippet) {
 }
 
 function generateRss(items: (Blog | Snippet)[], page = RSS_PAGE) {
+  if (!items || items.length === 0) {
+    throw new Error('RSS 生成失败：没有可用的内容项，无法生成 lastBuildDate')
+  }
+
   const { title, siteUrl, description, language, author } = SITE_METADATA
   const { email } = AUTHOR_INFO
+
+  const missingDate = items.filter((item) => !item.date)
+  if (missingDate.length > 0) {
+    console.warn('以下内容缺少 date 字段：')
+    missingDate.forEach((item) => {
+      console.warn(item.title || item._id || JSON.stringify(item))
+    })
+    throw new Error('有内容缺少 date 字段，无法生成 RSS')
+  }
+
   return `
 		<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 			<channel>
