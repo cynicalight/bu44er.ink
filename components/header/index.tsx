@@ -7,6 +7,7 @@ import { Container } from '~/components/ui/container'
 import { GrowingUnderline } from '~/components/ui/growing-underline'
 import { Link } from '~/components/ui/link'
 import { HEADER_NAV_LINKS } from '~/data/navigation'
+import { Twemoji } from '~/components/ui/twemoji'
 import { SITE_METADATA } from '~/data/site-metadata'
 import { Logo } from './logo'
 import { MobileNav } from './mobile-nav'
@@ -51,7 +52,7 @@ export function Header() {
         <Logo />
         <div className="flex items-center gap-4">
           <div className="hidden gap-1.5 sm:flex">
-            {HEADER_NAV_LINKS.map(({ title, href }) => {
+            {HEADER_NAV_LINKS.map(({ title, href, emoji }) => {
               const isActive = pathname.startsWith(href)
               return (
                 <Link key={title} href={href} className="px-3 py-1 font-medium">
@@ -59,9 +60,22 @@ export function Header() {
                     className={clsx(isActive && 'bg-[length:100%_50%]')}
                     data-umami-event={`nav-${href.replace('/', '')}`}
                   >
+                    <Twemoji emoji={emoji} />
                     {title}
                   </GrowingUnderline>
                 </Link>
+                //                 <MenuItem key={href} as="div">
+                //   {({ close }) => (
+                //     <Link
+                //       href={href}
+                //       className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 hover:bg-gray-200 dark:hover:bg-gray-800"
+                //       onClick={close}
+                //     >
+                //       <Twemoji emoji={emoji} />
+                //       <span data-umami-event={`nav-${href.replace('/', '')}`}>{title}</span>
+                //     </Link>
+                //   )}
+                // </MenuItem>
               )
             })}
             <MoreLinks />

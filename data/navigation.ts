@@ -1,10 +1,11 @@
 import { SITE_METADATA } from './site-metadata'
 
 export const HEADER_NAV_LINKS = [
-  { href: '/blog', title: 'Blog', emoji: 'writing-hand' },
+  { href: '/blog', title: 'Blog', emoji: 'memo' },
   // { href: '/snippets', title: 'Snippets', emoji: 'dna' },
-  { href: '/projects', title: 'Projects', emoji: 'man-technologist' },
-  { href: '/about', title: 'About', emoji: 'smiling-face-with-sunglasses' },
+  { href: '/gallery', title: 'Gallery', emoji: 'camera' },
+  { href: '/projects', title: 'Projects', emoji: 'laptop' },
+  { href: '/about', title: 'About', emoji: 'cowboy-hat-face' },
 ]
 
 export const MORE_NAV_LINKS = [
@@ -16,6 +17,7 @@ export const MORE_NAV_LINKS = [
 export const FOOTER_NAV_LINKS = [
   { href: '/blog', title: 'Blog' },
   // { href: '/snippets', title: 'Snippets' },
+  { href: '/gallery', title: 'Gallery' },
   { href: '/projects', title: 'Projects' },
   { href: '/tags', title: 'Tags' },
   // { href: '/feed.xml', title: 'RSS feed' },

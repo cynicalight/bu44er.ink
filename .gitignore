@@ -58,3 +58,5 @@ scripts/imdb-movies.csv
 update.sh
 remove.sh
 push.sh
+
+GUIDE.md

@@ -154,6 +154,42 @@ export const Snippet = defineDocumentType(() => ({
   },
 }))
 
+export const Gallery = defineDocumentType(() => ({
+  name: 'Gallery',
+  filePathPattern: 'gallery/**/*.mdx',
+  contentType: 'mdx',
+  fields: {
+    title: { type: 'string', required: true },
+    // icon: { type: 'string', required: true },
+    date: { type: 'date', required: true },
+    tags: { type: 'list', of: { type: 'string' }, default: [] },
+    lastmod: { type: 'date' },
+    draft: { type: 'boolean' },
+    summary: { type: 'string' },
+    images: { type: 'json' },
+    authors: { type: 'list', of: { type: 'string' } },
+    layout: { type: 'string' },
+    bibliography: { type: 'string' },
+    canonicalUrl: { type: 'string' },
+  },
+  computedFields: {
+    ...computedFields,
+    structuredData: {
+      type: 'json',
+      resolve: (doc) => ({
+        '@context': 'https://schema.org',
+        '@type': 'GalleryPosting',
+        headline: doc.title,
+        datePublished: doc.date,
+        dateModified: doc.lastmod || doc.date,
+        description: doc.summary,
+        image: doc.images ? doc.images[0] : SITE_METADATA.socialBanner,
+        url: `${SITE_METADATA.siteUrl}/${doc._raw.flattenedPath}`,
+      }),
+    },
+  },
+}))
+
 export const Author = defineDocumentType(() => ({
   name: 'Author',
   filePathPattern: 'authors/**/*.mdx',
@@ -174,7 +210,7 @@ export const Author = defineDocumentType(() => ({
 
 export default makeSource({
   contentDirPath: 'data',
-  documentTypes: [Blog, Snippet, Author],
+  documentTypes: [Blog, Snippet, Gallery, Author],
   mdx: {
     cwd: process.cwd(),
     remarkPlugins: [
@@ -204,8 +240,8 @@ export default makeSource({
     ],
   },
   onSuccess: async (importData) => {
-    const { allBlogs, allSnippets } = await importData()
-    createTagCount([...allBlogs, ...allSnippets])
+    const { allBlogs, allSnippets, allGalleries } = await importData()
+    createTagCount([...allBlogs, ...allSnippets, ...allGalleries])
     createSearchIndex(allBlogs)
   },
 })

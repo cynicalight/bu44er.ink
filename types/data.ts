@@ -17,6 +17,16 @@ export type Project = {
   builtWith: string[]
 }
 
+export type Gallery = {
+  type: 'trip' | 'street' | 'self'
+  title: string
+  description?: string
+  imgSrc: string
+  url?: string
+  repo?: string | GithubRepository | null
+  // builtWith: string[]
+}
+
 export type GoodreadsBook = {
   guid: string
   pubDate: string
