@@ -7,7 +7,15 @@ import 'css/gallery.css'
 
 import clsx from 'clsx'
 import type { Metadata } from 'next'
-import { JetBrains_Mono, Nunito, Playpen_Sans } from 'next/font/google'
+import {
+  JetBrains_Mono,
+  Nunito,
+  Playpen_Sans,
+  Yuji_Boku,
+  Athiti,
+  Tinos,
+  Exo_2,
+} from 'next/font/google'
 import type { SearchConfig } from 'pliny/search'
 import { SearchProvider } from 'pliny/search'
 import { UmamiAnalytics } from '~/components/analytics/umami'
@@ -37,6 +45,36 @@ const FONT_JETBRAINS_MONO = JetBrains_Mono({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-jetbrains-mono',
+})
+
+export const FONT_YUJI_BOKU = Yuji_Boku({
+  subsets: ['latin'],
+  weight: '400',
+  display: 'swap',
+  variable: '--font-yuji-boku',
+  style: ['normal'],
+})
+
+export const FONT_ATHITI = Athiti({
+  subsets: ['latin'],
+  display: 'swap',
+  weight: ['200', '300', '400', '500', '600', '700'], // 你需要的权重
+  variable: '--font-athiti',
+})
+
+export const FONT_TINOS = Tinos({
+  subsets: ['latin'],
+  display: 'swap',
+  weight: ['400', '700'], // 包含 regular 和 bold
+  style: ['normal', 'italic'], // 包含普通和斜体
+  variable: '--font-tinos',
+})
+
+export const FONT_EXO_2 = Exo_2({
+  subsets: ['latin'],
+  display: 'swap',
+  weight: ['200', '300', '400', '500', '600', '700', '800', '900'], // 可根据需要调整
+  variable: '--font-exo-2',
 })
 
 export const metadata: Metadata = {
@@ -89,7 +127,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         'scroll-smooth',
         FONT_NUNITO.variable,
         FONT_JETBRAINS_MONO.variable,
-        FONT_PLAYPEN_SANS.variable
+        FONT_PLAYPEN_SANS.variable,
+        FONT_YUJI_BOKU.variable,
+        FONT_ATHITI.variable,
+        FONT_TINOS.variable,
+        FONT_EXO_2.variable
       )}
       suppressHydrationWarning
     >

@@ -67,7 +67,8 @@ module.exports = {
         14: '3.5rem',
       },
       fontFamily: {
-        sans: ['var(--font-nunito)', ...fontFamily.sans],
+        // sans: ['var(--font-nunito)', ...fontFamily.sans],
+        sans: ['var(--font-exo-2)', ...fontFamily.sans],
         greeting: ['var(--font-playpen-sans)'],
       },
       colors: {
