@@ -68,7 +68,7 @@ module.exports = {
       },
       fontFamily: {
         // sans: ['var(--font-nunito)', ...fontFamily.sans],
-        sans: ['var(--font-exo-2)', ...fontFamily.sans],
+        sans: ['var(--font-exo-2)', '"Songti SC"', '"SimSun"', '"STSong"', 'serif', '"宋体"'],
         greeting: ['var(--font-playpen-sans)'],
       },
       colors: {
