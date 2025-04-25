@@ -6,10 +6,10 @@ export const HEADER_NAV_LINKS = [
   // { href: '/snippets', title: 'Snippets', emoji: 'dna' },
   // { href: '/projects', title: 'Projects', emoji: 'laptop' },
   // { href: '/about', title: 'About', emoji: 'cowboy-hat-face' },
-  { href: '/blog', title: 'BLOG' },
-  { href: '/gallery', title: 'GALLERY', emoji: '/' },
-  { href: '/tags', title: 'TAGS' },
-  { href: '/about', title: 'ABOUT' },
+  { href: '/blog', title: 'BLOG', emoji: 'memo' },
+  { href: '/gallery', title: 'GALLERY', emoji: 'camera' },
+  { href: '/tags', title: 'TAGS', emoji: 'tag' },
+  { href: '/about', title: 'ABOUT', emoji: 'cowboy-hat-face' },
 ]
 
 export const MORE_NAV_LINKS = [
