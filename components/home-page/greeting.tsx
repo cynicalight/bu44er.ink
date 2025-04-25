@@ -20,7 +20,7 @@ export function Greeting() {
 
         'text-[35px] leading-[50px] md:text-[60px] md:leading-[120px]',
         // 设置浅色模式下的文字颜色
-        'text-[#7F8872]',
+        'text-[#6b6f59]',
         // 设置深色模式下的文字颜色
         'dark:text-[#727B67]'
       )}
