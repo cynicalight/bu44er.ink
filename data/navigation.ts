@@ -1,15 +1,20 @@
 import { SITE_METADATA } from './site-metadata'
 
 export const HEADER_NAV_LINKS = [
-  { href: '/blog', title: 'Blog', emoji: 'memo' },
+  // { href: '/blog', title: 'Blog', emoji: 'memo' },
+  // { href: '/gallery', title: 'Gallery', emoji: 'camera' },
   // { href: '/snippets', title: 'Snippets', emoji: 'dna' },
-  { href: '/gallery', title: 'Gallery', emoji: 'camera' },
-  { href: '/projects', title: 'Projects', emoji: 'laptop' },
-  { href: '/about', title: 'About', emoji: 'cowboy-hat-face' },
+  // { href: '/projects', title: 'Projects', emoji: 'laptop' },
+  // { href: '/about', title: 'About', emoji: 'cowboy-hat-face' },
+  { href: '/blog', title: 'BLOG' },
+  { href: '/gallery', title: 'GALLERY', emoji: '/' },
+  { href: '/tags', title: 'TAGS' },
+  { href: '/about', title: 'ABOUT' },
 ]
 
 export const MORE_NAV_LINKS = [
-  { href: '/tags', title: 'Tags', emoji: 'label' },
+  { href: '/snippets', title: 'Snippets', emoji: 'dna' },
+  { href: '/projects', title: 'Projects', emoji: 'laptop' },
   { href: '/friends', title: 'Friends', emoji: 'woman-and-man-holding-hands' },
   // { href: SITE_METADATA.analytics.umamiAnalytics.shareUrl, title: 'Blog stats', emoji: 'bar-chart' },
 ]

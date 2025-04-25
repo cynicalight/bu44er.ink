@@ -60,7 +60,7 @@ export function Header() {
                     className={clsx(isActive && 'bg-[length:100%_50%]')}
                     data-umami-event={`nav-${href.replace('/', '')}`}
                   >
-                    <Twemoji emoji={emoji} />
+                    {/* <Twemoji emoji={emoji} /> */}
                     {title}
                   </GrowingUnderline>
                 </Link>

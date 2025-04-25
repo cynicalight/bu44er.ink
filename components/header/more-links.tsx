@@ -14,8 +14,8 @@ export function MoreLinks() {
       <Menu as="div" className="relative inline-block text-left">
         <MenuButton aria-label="More links" className="px-3 py-1 font-medium">
           <GrowingUnderline data-umami-event="nav-more-links" className="flex items-center gap-1">
-            <span>More</span>
-            <ChevronDown strokeWidth={1.5} size={20} />
+            <span>MORE</span>
+            <ChevronDown strokeWidth={2.5} size={20} />
           </GrowingUnderline>
         </MenuButton>
         <Transition
