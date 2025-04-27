@@ -4,36 +4,42 @@ import { GrowingUnderline } from '~/components/ui/growing-underline'
 import { SITE_METADATA } from '~/data/site-metadata'
 
 const LINKS = [
+  // {
+  //   title: `What have I built?`,
+  //   href: `/projects`,
+  //   emoji: 'man-technologist',
+  //   event: 'home-link-projects',
+  // },
   {
-    title: `What have I built?`,
-    href: `/projects`,
-    emoji: 'man-technologist',
-    event: 'home-link-projects',
-  },
-  {
-    title: `My writings`,
+    title: `My blog`,
     href: `/blog`,
     emoji: 'memo',
     event: 'home-link-blog',
   },
   {
-    title: `Snippets collection`,
-    href: `/snippets`,
-    emoji: 'dna',
-    event: 'home-link-snippets',
+    title: `My gallery`,
+    href: `/gallery`,
+    emoji: 'camera',
+    event: 'home-link-gallery',
   },
+  // {
+  //   title: `Snippets collection`,
+  //   href: `/snippets`,
+  //   emoji: 'dna',
+  //   event: 'home-link-snippets',
+  // },
   {
-    title: `About me & this blog`,
+    title: `About me`,
     href: `/about`,
     emoji: 'smiling-face-with-sunglasses',
     event: 'home-link-about',
   },
-  {
-    title: `Traffic and insights`,
-    href: SITE_METADATA.analytics.umamiAnalytics.shareUrl,
-    emoji: 'bar-chart',
-    event: 'home-link-analytics',
-  },
+  // {
+  //   title: `Traffic and insights`,
+  //   href: SITE_METADATA.analytics.umamiAnalytics.shareUrl,
+  //   emoji: 'bar-chart',
+  //   event: 'home-link-analytics',
+  // },
 ]
 
 export function BlogLinks() {
