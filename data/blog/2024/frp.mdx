@@ -72,9 +72,10 @@ remotePort = 6000
 之后在本机通过公网服务器连接内网服务器：
 
 ```bash
-ssh -p 6000 username@8.148.7.166 -i ~/.ssh/privatekey
+ssh -p 6000 username@x.x.x.x -i ~/.ssh/privatekey
 ```
 
+- `x.x.x.x` 是**公网IP服务器**的IP地址
 - `username` 需要写**内网服务器**的用户名
 - `-i ~/.ssh/privatekey` 私钥登录是可选项，私钥是**内网服务器**的私钥
 
