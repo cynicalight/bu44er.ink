@@ -1,0 +1,132 @@
+---
+title: '如何将keil项目移植到pio并编译烧录-VSCode版'
+summary: 'keil项目移植到platformIO并编译烧录 with stm32 on macOS via vscode'
+date: 2025-05-09
+tags:
+  - embedded
+draft: false
+images: ['/static/images/blog/2024/keil-to-pio/Pasted%20image%2020250509131014.webp']
+authors: ['default']
+---
+
+- stm32 on macOS
+- `board = genericSTM32F407IGT6`
+
+## keil项目移植到pio项目
+
+- 为什么要移植？
+  1.  keil的IDE太落后，gb2312编码。。。
+  2.  pio主要用的是vscode的pio插件，而vscode是世界上最好的编辑器=)
+
+### 新建pio项目
+
+1. 下载好pio插件，可能有一些关于python环境和core的报错自行解决一下
+2. 新建项目，如下
+
+![](/static/images/blog/2024/keil-to-pio/Pasted%20image%2020250501023604.webp)
+
+### 移植keil项目文件
+
+左边是新建的pio项目，右边是原来的keil项目
+
+![](/static/images/blog/2024/keil-to-pio/Pasted%20image%2020250501023702.webp)
+
+`Src Inc` 放到对应的 `src include` 中即可
+
+注意，`Drivers` 中的内容，pio会在编译的时候自动放在 `.pio/build`，如下
+
+![](/static/images/blog/2024/keil-to-pio/Pasted%20image%2020250501023946.webp)
+
+按照上面的方式，默认ini配置下，直接编译就没有错误，并不需要在ini中更改设置。
+
+编译和烧录都在VSCode左下角的底栏：
+
+![](/static/images/blog/2024/keil-to-pio/Pasted%20image%2020250509125550.webp)
+
+### 烧录
+
+首先需要修改ini文件，配置对应的烧录协议，实验课用的是stlink的仿真器，一般可能是serial，按自己情况来：
+
+![](/static/images/blog/2024/keil-to-pio/Pasted%20image%2020250509125744.webp)
+
+正常按上文配置，直接点VSCode左下角的烧录即可：
+
+![](/static/images/blog/2024/keil-to-pio/Pasted%20image%2020250509125550.webp)
+
+#### 方法二：openocd手动烧录
+
+openocd工具连接开发板
+
+```bash
+brew install openocd
+```
+
+找到 OpenOCD 的脚本目录，其中存放了 **OpenOCD 所用的各种配置脚本**
+
+```
+/opt/homebrew/Cellar/open-ocd/0.12.0_1/share/openocd/scripts
+```
+
+`scripts` 目录下常见的子目录及其作用：
+
+| **子目录**     | **内容**                                      | **作用**                  |
+| -------------- | --------------------------------------------- | ------------------------- |
+| board/         | 各种开发板配置文件（如 stm32f4discovery.cfg） | 一键配置目标板的调试环境  |
+| interface/     | 调试器接口配置（如 J-Link, ST-Link）          | 告诉 OpenOCD 用什么调试器 |
+| target/        | 目标芯片的配置（如 stm32f4x.cfg）             | 配置具体芯片型号与架构    |
+| utils/         | 一些额外的脚本工具                            | 可选工具或宏命令          |
+| cpld/, dsp/ 等 | 特定硬件类别支持                              | 针对特殊硬件平台          |
+
+e.g. OpenOCD 连接 STM32F407 开发板（例如使用 ST-Link），需要运行命令如下：
+
+```
+openocd \
+  -f interface/stlink.cfg \
+  -f target/stm32f4x.cfg
+```
+
+连接命令：
+
+```bash
+openocd \
+-f /opt/homebrew/Cellar/open-ocd/0.12.0_1/share/openocd/scripts/interface/stlink-v2-1.cfg \
+-f /opt/homebrew/Cellar/open-ocd/0.12.0_1/share/openocd/scripts/target/stm32f4x.cfg
+```
+
+![](/static/images/blog/2024/keil-to-pio/Pasted%20image%2020250509130108.webp)
+
+可以看到4444端口在监听telnet，我们用telnet连接4444：
+
+![](/static/images/blog/2024/keil-to-pio/Pasted%20image%2020250509130201.webp)
+
+并输入烧录命令：
+
+```bash
+flash write_image erase /Volumes/44/embedded/pio/beep-pio/.pio/build/genericSTM32F407IGT6/firmware.bin 0x08000000
+```
+
+- `/Volumes/44/embedded/pio/beep-pio/.pio/build/genericSTM32F407IGT6/firmware.bin` 是编译生成的文件的路径
+
+注意，如果板子可能已经启动了程序，需要reset才能烧录，具体操作如下：
+
+![](/static/images/blog/2024/keil-to-pio/Pasted%20image%2020250509131014.webp)
+
+```bash
+reset halt # 重置 暂停
+flash write_image erase /Volumes/44/embedded/pio/beep-pio/.pio/build/genericSTM32F407IGT6/firmware.bin 0x08000000 # 烧录
+reset run # 启动
+```
+
+### 补充
+
+mac查看stlink是否已经连接：
+
+```bash
+lsusb           # brew install usbutils
+```
+
+## REF
+
+- [vscode + PlatformIO嵌入式芯片开发环境搭建 - 闫良 - 博客园](https://www.cnblogs.com/savo-shen/p/18312608)
+- [搭建 Apple Mac M1 stm32 开发环境近期想学习 stm32 开发，看了些书和视频，买了开发板。开发板到了 - 掘金](https://juejin.cn/post/7361688292352639003)
+- [Site Unreachable](https://zhuanlan.zhihu.com/p/77511228)
