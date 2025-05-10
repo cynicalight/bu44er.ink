@@ -1,10 +1,11 @@
 ---
-title: Python项目设置自定义module路径
+title: 'Python项目找不到自定义module'
+summary: 'Python项目找不到自定义module'
 date: 2025-04-08
 tags:
   - python
 draft: false
-images: ['/static/images/blog/2025/400534/Pasted%20image%2020250408014336.png']
+images: ['/static/images/blog/2024/python-module/Pasted%20image%2020250408014336.webp']
 authors: ['default']
 ---
 
@@ -18,7 +19,7 @@ module 分为：
 2. `extension module`（扩展模块）
 3. `package`（包）
 
-## 常见报错
+## 报错
 
 报错belike：
 
@@ -28,7 +29,7 @@ ModuleNotFoundError: No module named 'open_r1.rewards'
 
 目录如下：
 
-![](/static/images/blog/2025/400534/Pasted%20image%2020250408014336.png)
+![](/static/images/blog/2024/python-module/Pasted%20image%2020250408014336.webp)
 
 ## Meth 1. setup.py
 
@@ -58,6 +59,10 @@ sys.path.append('/home/zhangjie/openr1-gpu04/src')
 ```
 
 - **动态性**：仅在当前 Python 进程运行期间有效。一旦 Python 进程结束，这个路径设置就会失效。
+
+## Jupyter
+
+在jupyter中运行代码时，如果使用`sys.path.append`的方式添加路径，尽量写**绝对路径**，因为即使你在项目根目录运行某一子目录下的`ipynb`文件，默认运行路径不是项目根目录而是`ipynb`文件所在的子目录，这一点和普通py文件不一样。
 
 ## REF
 
