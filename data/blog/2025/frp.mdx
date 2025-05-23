@@ -1,11 +1,11 @@
 ---
-title: 'frp配置内网服务器ssh穿透'
-summary: '你需要一台具有公网IP的服务器和一台需要被ssh连接的内网服务器。'
-date: 2025-04-27
+title: 'frp'
+summary: 'frp'
+date: 2025-05-01
 tags:
   - others
 draft: false
-images: ['/static/images/blog/2024/frp/Pasted%20image%2020250427134703.webp']
+images: ['/static/images/blog/2025/frp/Pasted%20image%2020250427134703.webp']
 authors: ['default']
 ---
 
@@ -16,8 +16,6 @@ authors: ['default']
 
 ## 内网服务器ssh穿透
 
-你需要一台具有公网IP的服务器和一台需要被ssh连接的内网服务器。
-
 ### 原理
 
 - server：公网IP服务器作frps
@@ -26,7 +24,7 @@ authors: ['default']
 
 ### 实操
 
-github下载对应版本frp的release，放到公网服务器和内网服务器上。
+github下载对应版本的release，放到公网服务器和内网服务器上。
 
 在公网IP服务器设置：
 
@@ -35,7 +33,7 @@ github下载对应版本frp的release，放到公网服务器和内网服务器�
 bindPort = 7000
 ```
 
-启动frps：
+启动 `frps`：
 
 ```bash
 ./frps -c frps.toml
@@ -59,15 +57,15 @@ remotePort = 6000
 - `serverAddr` 是公网IP
 - `serverPort` 和 `remotePort` 都是需要在公网IP服务器上设置允许访问的端口
 
-启动frpc：
+启动 `frpc`：
 
 ```bash
-./frps -c frps.toml
+./frpc -c frpc.toml
 ```
 
 两个服务器都启动了：
 
-![](/static/images/blog/2024/frp/Pasted%20image%2020250427135057.webp)
+![](/static/images/blog/2025/frp/Pasted%20image%2020250427135057.webp)
 
 之后在本机通过公网服务器连接内网服务器：
 
@@ -79,4 +77,4 @@ ssh -p 6000 username@x.x.x.x -i ~/.ssh/privatekey
 - `username` 需要写**内网服务器**的用户名
 - `-i ~/.ssh/privatekey` 私钥登录是可选项，私钥是**内网服务器**的私钥
 
-![](/static/images/blog/2024/frp/Pasted%20image%2020250427134703.webp)
+![](/static/images/blog/2025/frp/Pasted%20image%2020250427134703.webp)

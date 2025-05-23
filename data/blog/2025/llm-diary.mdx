@@ -1,0 +1,113 @@
+---
+title: 'LLM日记'
+summary: 'LLM日记'
+date: 2025-05-23
+tags:
+  - others
+draft: false
+images: ['/static/images/blog/2025/llm-diary/Pasted%20image%2020250523203336.webp']
+authors: ['default']
+---
+
+## Concept
+
+### 复读机现象
+
+- 模型倾向于无限地复制输入的文本或者以过度频繁的方式重复相同的句子或短语。
+
+原因：
+
+- data bias：大量的重复文本，质量低
+- 任务太单一
+
+### logits
+
+logits 是模型的“原始输出”（在softmax层之前），表示每个 token 的打分，没经过任何概率归一化处理。
+
+- 一般表示为向量 $z = (z_1, z_2, …, z_n)$
+
+在训练中，logits 会传入 softmax 转为概率，再计算 loss：
+
+$$
+\text{softmax}(z_i) = \frac{e^{z_i}}{\sum_j e^{z_j}}
+$$
+
+#### logprobs
+
+logprobs 是 token 被预测为某个值的对数概率，即：
+
+$$
+\text{logprobs}(z_i) = \log \left( \frac{e^{z_i}}{\sum_j e^{z_j}} \right) = z_i - \log\left( \sum_j e^{z_j} \right)
+$$
+
+- logprobs 是 logits 经过 softmax 后的 log 值（log softmax）；
+
+通常用于：
+
+- 预测 top-k 的 token（概率最大的 token）
+- 计算 perplexity
+- 分析 token 被预测的置信度
+
+由logits计算logprobs：
+
+```python
+import numpy as np
+
+# 假设从模型中得到的logits
+logits = np.array([2.0, 1.0, 0.1])
+
+# 计算Softmax概率
+exp_logits = np.exp(logits)
+probabilities = exp_logits / np.sum(exp_logits)
+
+# 计算logprobs
+logprobs = np.log(probabilities)
+
+# 输出结果
+print("Logits: ", logits)
+print("Probabilities: ", probabilities)
+print("Log-probabilities: ", logprobs)
+```
+
+## Coding
+
+### world_size
+
+报错信息：
+
+```bash
+Config mesh_device None world_size = 8
+```
+
+world_size 等于 num_processes，约等于分布式训练中GPU的个数。
+
+可以在训练命令中通过修改 num_processes 参数来修改 world_size:
+
+```bash
+accelerate launch --num_processes=2
+```
+
+### hugging face
+
+#### 401
+
+权限问题，cli登录：
+
+```bash
+huggingface-cli login
+```
+
+#### 403
+
+```bash
+OSError: You are trying to access a gated repo. Make sure to have access to it at [https://huggingface.co/meta-llama/Meta-Llama-3-8B-Instruct](vscode-file://vscode-app/Applications/Visual%20Studio%20Code.app/Contents/Resources/app/out/vs/code/electron-sandbox/workbench/workbench.html). 403 Client Error.
+```
+
+访问权限错误，因为Meta-Llama-3-8B-Instruct模型是一个受限访问的仓库。
+
+需要**申请访问权限**：
+
+- 访问[https://huggingface.co/meta-llama/Meta-Llama-3-8B-Instruct](vscode-file://vscode-app/Applications/Visual%20Studio%20Code.app/Contents/Resources/app/out/vs/code/electron-sandbox/workbench/workbench.html)
+- 点击"Access Request"
+
+![](../../../../img/Pasted%20image%2020250523203336.png)
