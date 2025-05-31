@@ -12,7 +12,7 @@ const EnhancedGalleryImage = ({ alt = '', src, style, ...rest }: ImageProps) => 
   if (!src) return null
 
   return (
-    <Zoom zoomImg={{ src, alt }} canSwipeToUnzoom={true} zoomMargin={40}>
+    <Zoom zoomImg={{ src, alt }} canSwipeToUnzoom={true} zoomMargin={60}>
       <div className="gallery-image">
         <img
           alt={alt}
