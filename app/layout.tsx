@@ -24,6 +24,7 @@ import { Header } from '~/components/header'
 import { TiltedGridBackground } from '~/components/ui/tilted-grid-background'
 import { SITE_METADATA } from '~/data/site-metadata'
 import { ThemeProviders } from './theme-providers'
+import { AuthProvider } from './auth-provider'
 
 const FONT_PLAYPEN_SANS = Playpen_Sans({
   subsets: ['latin'],
@@ -171,8 +172,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ThemeProviders>
           <UmamiAnalytics websiteId={SITE_METADATA.analytics.umamiAnalytics.websiteId} />
           <SearchProvider searchConfig={SITE_METADATA.search as SearchConfig}>
-            <Header />
-            <main className="mb-auto grow">{children}</main>
+            <AuthProvider>
+              <Header />
+              <main className="mb-auto grow">{children}</main>
+            </AuthProvider>
           </SearchProvider>
           <Footer />
         </ThemeProviders>
