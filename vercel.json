@@ -4,5 +4,9 @@
       "source": "/stats/:match*",
       "destination": "https://analytics.umami.is/:match*"
     }
-  ]
+  ],
+  "framework": "nextjs",
+  "buildCommand": "pnpm run build",
+  "installCommand": "pnpm install",
+  "devCommand": "pnpm dev"
 }
