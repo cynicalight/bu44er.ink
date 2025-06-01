@@ -6,17 +6,41 @@
 
 </div>
 
-<img style="border-radius: 6px" src="./public/static/images/home_page.png">
+<img style="border-radius: 6px" src="./public/static/images/home-page.png">
 
-## 动机
+## 项目结构
 
-> 分享就是学习！
-
-我创建这个博客是为了记录和分享我作为一名软件工程师的学习和见解，同时也记录我的生活点滴。它是我在整个旅程中积累的宝贵信息的宝库。
-
-记录和整理我的想法有助于我巩固对新概念和技术的理解。我的目标是为对 Web 开发和相关技术感兴趣的人提供有用的资源。
-
-非常感谢您的评论和反馈🍻。
+```
+app/ - Next.js App Router
+    layout.tsx: 全局布局组件，包含头部、底部、主题切换
+    page.tsx: 主页组件
+    blog/[...slug]/page.tsx: 博客文章动态路由
+    api/: 服务器API端点
+components/ - 可复用组件
+    ui/: 基础UI组件（按钮、输入框、卡片）
+    blog/: 博客相关组件（文章列表、标签、评论）
+    mdx/: MDX渲染增强组件
+    gallery/: 图片画廊组件
+    header/, footer/: 页面结构组件
+layouts/ - 页面布局模板
+    post-layout.tsx: 博客文章布局
+    list-layout.tsx: 列表页面布局
+data/ - 内容数据
+    blog/: MDX格式博客文章
+    authors/: 作者信息
+    site-metadata.ts: 网站元数据
+public/ - 静态资源
+    static/images/: 图片资源
+    fonts/: 字体文件
+css/ - 全局样式
+    tailwind.css: TailwindCSS入口
+    gallery.css: 画廊特定样式
+prisma/ - 数据库交互
+    schema.prisma: 数据库模型定义
+    migrations/: 数据库迁移文件
+utils/, hooks/, server/ - 功能代码
+    工具函数、自定义钩子、服务器端逻辑
+```
 
 ## 技术栈
 
@@ -27,11 +51,11 @@
 
 ## 演示
 
-演示站：<https://mengke.me>
+演示站：<https://bu44er.ink>
 
 ## 如何部署一个同样的博客？
 
-> 我这里只描述基本的操作步骤。如果你是零基础或在部署过程中遇到任何问题，请发邮件给我：me@mengke.me。
+> 我这里只描述基本的操作步骤。如果你是零基础或在部署过程中遇到任何问题，请发邮件给我：391900788DOTqqDOTcom
 
 ### 1. 安装
 
@@ -59,7 +83,7 @@
 
 4. 每篇博文的阅读量会被自动统计到这个数据库中。
 
-## ☕️ 支持 Mengke
+## ☕️ 支持开源
 
 感谢原作者：[Mengke](https://github.com/mengke)
 

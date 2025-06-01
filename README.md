@@ -6,7 +6,41 @@
 
 </div>
 
-<img style="border-radius: 6px" src="./public/static/images/home_page.png">
+<img style="border-radius: 6px" src="./public/static/images/home-page.png">
+
+## Project Structure
+
+```
+app/ - Next.js App Router
+    layout.tsx: Global layout component with header, footer, and theme switching
+    page.tsx: Home page component
+    blog/[...slug]/page.tsx: Blog post dynamic routing
+    api/: Server API endpoints
+components/ - Reusable components
+    ui/: Basic UI components (buttons, inputs, cards)
+    blog/: Blog-related components (article lists, tags, comments)
+    mdx/: MDX rendering enhancement components
+    gallery/: Image gallery components
+    header/, footer/: Page structure components
+layouts/ - Page layout templates
+    post-layout.tsx: Blog post layout
+    list-layout.tsx: List page layout
+data/ - Content data
+    blog/: MDX format blog posts
+    authors/: Author information
+    site-metadata.ts: Website metadata
+public/ - Static resources
+    static/images/: Image resources
+    fonts/: Font files
+css/ - Global styles
+    tailwind.css: TailwindCSS entry point
+    gallery.css: Gallery-specific styles
+prisma/ - Database interaction
+    schema.prisma: Database model definition
+    migrations/: Database migration files
+utils/, hooks/, server/ - Functional code
+    Utility functions, custom hooks, server-side logic
+```
 
 ## Motivation
 
@@ -27,7 +61,7 @@ Your comments and feedback are highly appreciated 🍻. They contribute to the g
 
 ## DEMO
 
-You can see what the blog looks like here: <https://mengke.me>
+You can see what the blog looks like here: <https://bu44er.ink>
 
 ## How to deploy a similar blog?
 
@@ -59,7 +93,7 @@ You can see what the blog looks like here: <https://mengke.me>
 
 ## Settings
 
-if you want to add some twemoji, you can add the following code to your `css/twemoji.css` file:
+If you want to add some twemoji, you can add the following code to your `css/twemoji.css` file:
 
 ```css
 /* ❤️‍🩹 mending heart */
@@ -68,8 +102,6 @@ if you want to add some twemoji, you can add the following code to your `css/twe
 }
 ```
 
-## ☕️ Support Mengke
+## ☕️ Support Open Source
 
 Thanks to the original author: [Mengke](https://github.com/mengke)
-
-<a href='https://ko-fi.com/P5P2ZV7NP' target='_blank'><img height='50' style='border:0px;height:50px;' src='https://storage.ko-fi.com/cdn/kofi2.png?v=3' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
