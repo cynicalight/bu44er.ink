@@ -1,10 +1,10 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const isRegistered = searchParams.get('registered') === 'true'
@@ -136,5 +136,18 @@ export default function LoginPage() {
         </p>
       </div>
     </div>
+  )
+}
+
+// 加载中的占位组件
+function LoginLoading() {
+  return <div className="p-4 text-center">加载中...</div>
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<LoginLoading />}>
+      <LoginForm />
+    </Suspense>
   )
 }
