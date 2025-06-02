@@ -53,7 +53,7 @@ function LoginForm() {
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.error || '登录失败')
+        throw new Error(data.error || 'Login failed!')
       }
 
       // 登录成功，保存令牌到localStorage
@@ -71,7 +71,7 @@ function LoginForm() {
 
   return (
     <div className="container mx-auto max-w-md px-4 py-8">
-      <h1 className="mb-6 text-center text-3xl font-bold">登录</h1>
+      <h1 className="mb-6 text-center text-3xl font-bold">Login</h1>
 
       {error && (
         <div className="mb-4 rounded border border-red-400 bg-red-100 px-4 py-3 text-red-700">
@@ -88,7 +88,7 @@ function LoginForm() {
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label htmlFor="email" className="mb-1 block text-sm font-medium">
-            电子邮箱
+            Email
           </label>
           <input
             type="email"
@@ -103,7 +103,7 @@ function LoginForm() {
 
         <div>
           <label htmlFor="password" className="mb-1 block text-sm font-medium">
-            密码
+            Password
           </label>
           <input
             type="password"
@@ -123,15 +123,15 @@ function LoginForm() {
             loading ? 'bg-blue-300' : 'bg-blue-600 hover:bg-blue-700'
           }`}
         >
-          {loading ? '登录中...' : '登录'}
+          {loading ? 'Logging in...' : 'Login'}
         </button>
       </form>
 
       <div className="mt-4 text-center">
         <p>
-          还没有账号？{' '}
+          Not registered?{' '}
           <Link href="/register" className="text-blue-600 hover:underline">
-            注册
+            Sign up
           </Link>
         </p>
       </div>
@@ -141,7 +141,7 @@ function LoginForm() {
 
 // 加载中的占位组件
 function LoginLoading() {
-  return <div className="p-4 text-center">加载中...</div>
+  return <div className="p-4 text-center">Loading...</div>
 }
 
 export default function LoginPage() {

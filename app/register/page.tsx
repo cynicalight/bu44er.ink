@@ -29,12 +29,12 @@ export default function RegisterPage() {
 
     // 表单验证
     if (formData.password.length < 6) {
-      setError('密码长度必须至少为6个字符')
+      setError('The password length must be at least 6 characters.')
       return
     }
 
     if (formData.password !== formData.confirmPassword) {
-      setError('两次输入的密码不一致')
+      setError('The passwords entered do not match.')
       return
     }
 
@@ -56,7 +56,7 @@ export default function RegisterPage() {
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.error || '注册失败')
+        throw new Error(data.error || 'Register failed!')
       }
 
       // 注册成功，跳转到登录页面
@@ -70,7 +70,7 @@ export default function RegisterPage() {
 
   return (
     <div className="container mx-auto max-w-md px-4 py-8">
-      <h1 className="mb-6 text-center text-3xl font-bold">注册账号</h1>
+      <h1 className="mb-6 text-center text-3xl font-bold">Sign up</h1>
 
       {error && (
         <div className="mb-4 rounded border border-red-400 bg-red-100 px-4 py-3 text-red-700">
@@ -81,7 +81,7 @@ export default function RegisterPage() {
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label htmlFor="username" className="mb-1 block text-sm font-medium">
-            用户名
+            Username
           </label>
           <input
             type="text"
@@ -96,7 +96,7 @@ export default function RegisterPage() {
 
         <div>
           <label htmlFor="email" className="mb-1 block text-sm font-medium">
-            电子邮箱
+            Email
           </label>
           <input
             type="email"
@@ -111,7 +111,7 @@ export default function RegisterPage() {
 
         <div>
           <label htmlFor="password" className="mb-1 block text-sm font-medium">
-            密码
+            Password
           </label>
           <input
             type="password"
@@ -122,12 +122,12 @@ export default function RegisterPage() {
             required
             className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          <p className="mt-1 text-xs text-gray-500">密码长度必须至少为6个字符</p>
+          <p className="mt-1 text-xs text-gray-500">Password must be at least 6 characters.</p>
         </div>
 
         <div>
           <label htmlFor="confirmPassword" className="mb-1 block text-sm font-medium">
-            确认密码
+            Confirm Password
           </label>
           <input
             type="password"
@@ -147,15 +147,15 @@ export default function RegisterPage() {
             loading ? 'bg-blue-300' : 'bg-blue-600 hover:bg-blue-700'
           }`}
         >
-          {loading ? '注册中...' : '注册'}
+          {loading ? 'Registering...' : 'Register'}
         </button>
       </form>
 
       <div className="mt-4 text-center">
         <p>
-          已有账号？{' '}
+          Already have an account?{' '}
           <Link href="/login" className="text-blue-600 hover:underline">
-            登录
+            Login
           </Link>
         </p>
       </div>
