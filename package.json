@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@headlessui/react": "2.1.5",
+    "@neondatabase/serverless": "^1.0.0",
     "@next/bundle-analyzer": "14.2.8",
     "@octokit/graphql": "^8.1.1",
     "@prisma/client": "^5.21.0",
