@@ -1,0 +1,82 @@
+---
+title: 'Vibe Coding Guidance'
+summary: 'Vibe Coding Guidance'
+date: 2025-06-09
+tags:
+  - others
+draft: false
+images: ['/static/images/blog/2025/mou.webp']
+authors: ['default']
+---
+
+- 好文转载：[Fetching Title#brw5](https://x.com/vasumanmoza/status/1923912878370980115)
+- by meta engineer vasumanmoza
+
+## Step 1: architecture.md
+
+Open ChatGPT (4o, not o1/o3/o4) and say:
+
+```markdown
+I’m building a [description of your product - the more detailed the better]. Use Next.js for frontend, Supabase for DB + auth.
+Give me the full architecture about this project:
+
+- File + folder structure
+- What each part does
+- Where state lives, how services connect
+  Format this entire document in markdown.
+```
+
+Save its output as `architecture.md` and throw it in an empty folder where your project will live.
+
+## Step 2: tasks.md
+
+Now say:
+
+```markdown
+Using that architecture, write a granular step-by-step plan to build the MVP.
+Each task should:
+
+- Be incredibly small + testable
+- Have a clear start + end
+- Focus on one concern
+  I’ll be passing this off to an engineering LLM that will be told to complete one task at a time, allowing me to test in between.
+```
+
+Save it as `tasks.md`. Again, throw it in the folder.
+
+## Step 3: Cursor
+
+```markdown
+You’re an engineer building this codebase.
+You've been given `architecture.md` and `tasks.md`.
+
+- Read both carefully. There should be no ambiguity about what we’re building.
+- Follow `tasks.md` and complete one task at a time.
+- After each task, stop. I’ll test it. If it works, commit to GitHub and move to the next.
+```
+
+Include this as well - this is crucial:
+
+### CODING PROTOCOL
+
+```markdown
+Coding Instructions
+
+- Write the absolute minimum code required
+- No sweeping changes
+- No unrelated edits - focus on just the task you're on
+- Make code precise, modular, testable
+- Don’t break existing functionality
+- If I need to do anything (e.g. Supabase/AWS config), tell me clearly
+```
+
+This system fixes the biggest problem with vibe coding:
+
+You’re not dumping everything into the IDE and praying.
+You’re giving it a roadmap.
+You’re keeping it on rails.
+You stay in control.
+
+This workflow lets you ship clean, testable AI-assisted code - without the spiral.
+
+Normally I'd ask you to follow me for the playbook but this is literally it. Good luck
