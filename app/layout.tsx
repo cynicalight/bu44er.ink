@@ -7,15 +7,6 @@ import 'css/gallery.css'
 
 import clsx from 'clsx'
 import type { Metadata } from 'next'
-import {
-  JetBrains_Mono,
-  Nunito,
-  Playpen_Sans,
-  Yuji_Boku,
-  Athiti,
-  Tinos,
-  Exo_2,
-} from 'next/font/google'
 import type { SearchConfig } from 'pliny/search'
 import { SearchProvider } from 'pliny/search'
 import { UmamiAnalytics } from '~/components/analytics/umami'
@@ -26,58 +17,15 @@ import { SITE_METADATA } from '~/data/site-metadata'
 import { ThemeProviders } from './theme-providers'
 import { AuthProvider } from './auth-provider'
 import { SpeedInsights } from '@vercel/speed-insights/next'
-
-const FONT_PLAYPEN_SANS = Playpen_Sans({
-  subsets: ['latin'],
-  display: 'swap',
-  style: ['normal'],
-  weight: ['800'],
-  variable: '--font-playpen-sans',
-})
-
-const FONT_NUNITO = Nunito({
-  subsets: ['latin'],
-  display: 'swap',
-  weight: ['400', '500', '600', '700', '800'],
-  variable: '--font-nunito',
-})
-
-const FONT_JETBRAINS_MONO = JetBrains_Mono({
-  weight: ['400', '500'],
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-jetbrains-mono',
-})
-
-export const FONT_YUJI_BOKU = Yuji_Boku({
-  subsets: ['latin'],
-  weight: '400',
-  display: 'swap',
-  variable: '--font-yuji-boku',
-  style: ['normal'],
-})
-
-export const FONT_ATHITI = Athiti({
-  subsets: ['latin'],
-  display: 'swap',
-  weight: ['200', '300', '400', '500', '600', '700'], // 你需要的权重
-  variable: '--font-athiti',
-})
-
-export const FONT_TINOS = Tinos({
-  subsets: ['latin'],
-  display: 'swap',
-  weight: ['400', '700'], // 包含 regular 和 bold
-  style: ['normal', 'italic'], // 包含普通和斜体
-  variable: '--font-tinos',
-})
-
-export const FONT_EXO_2 = Exo_2({
-  subsets: ['latin'],
-  display: 'swap',
-  weight: ['200', '300', '400', '500', '600', '700', '800', '900'], // 可根据需要调整
-  variable: '--font-exo-2',
-})
+import {
+  FONT_JETBRAINS_MONO,
+  FONT_NUNITO,
+  FONT_PLAYPEN_SANS,
+  FONT_YUJI_BOKU,
+  FONT_ATHITI,
+  FONT_TINOS,
+  FONT_EXO_2,
+} from '~/lib/fonts'
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_METADATA.siteUrl),

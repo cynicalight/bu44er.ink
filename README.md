@@ -77,6 +77,22 @@ You can see what the blog looks like here: <https://bu44er.ink>
 
 2. Update the information in the files in the `/data` directory, which contains the blog data.
 
+> **⚠️ Important Note for Gallery Articles:**
+>
+> When adding new gallery articles (`.mdx` files in `data/gallery/`), you must manually update the `data/gallery.ts` file to add the corresponding entry. This file controls which galleries appear in the gallery index page.
+>
+> Example:
+>
+> ```typescript
+> {
+>   type: 'trip',
+>   title: 'Your Gallery Title',
+>   description: 'Description of your gallery',
+>   imgSrc: '/static/images/blog/YYYY/gallery-slug/cover-image.webp',
+>   url: '/gallery/gallery-slug',
+> }
+> ```
+
 ### 3. Deploy to Vercel
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmk965%2Fmengke.me&env=NEXT_PUBLIC_GISCUS_REPO,NEXT_PUBLIC_GISCUS_REPOSITORY_ID,NEXT_PUBLIC_GISCUS_CATEGORY,NEXT_PUBLIC_GISCUS_CATEGORY_ID,NEXT_UMAMI_ID,SPOTIFY_CLIENT_ID,SPOTIFY_CLIENT_SECRET,SPOTIFY_REFRESH_TOKEN,DATABASE_URL,GITHUB_API_TOKEN&envDescription=Giscus%5CUmami%5CSpotify%5CData%5CGithub&envLink=https%3A%2F%2Fgithub.com%2Fmk965%2Fmengke.me%2Fblob%2Fmain%2F.env.example&project-name=mengke-me-blog&repository-name=mengke-me-blog&demo-title=mengke.me&demo-description=Mengke's%20blog%20-%20Mengke's%20coding%20journey&demo-url=https%3A%2F%2Fwww.mengke.me%2F&demo-image=https%3A%2F%2Fwww.mengke.me%2Fstatic%2Fimages%2Fhome_page.webp)

@@ -6,9 +6,15 @@ export const GALLERY: Gallery[] = [
     title: '山南',
     description: `2024年-西藏山南市儿童福利院-种太阳暑期支教`,
     imgSrc: '/static/images/blog/2024/shannan/Pasted%20image%2020250420100933.webp',
-    url: '/blog/2025/shannan',
-    // demo: <AvpDemo />,
-    // builtWith: ['WebGL', 'Typescript'],
+    url: '/gallery/2024/shannan',
+  },
+  {
+    type: 'trip',
+    title: '颐和园',
+    description: `2025年-颐和园游览`,
+    imgSrc:
+      '/static/images/blog/2025/the-summer-palace/F6C218FD-6C16-4ADA-B683-E35B82D93D63_1_102_o.webp',
+    url: '/gallery/2025/the-summer-palace',
   },
 
   // {
