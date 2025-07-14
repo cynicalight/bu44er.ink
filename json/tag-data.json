@@ -1,14 +1,14 @@
 {
-  "java": 3,
-  "sec": 8,
-  "php": 2,
-  "python": 1,
   "others": 8,
-  "cs": 1,
-  "embedded": 1,
   "linux": 1,
   "llm": 3,
-  "ml": 1,
+  "embedded": 1,
   "rl": 1,
-  "paper": 1
+  "paper": 1,
+  "ml": 1,
+  "python": 1,
+  "cs": 1,
+  "sec": 8,
+  "java": 3,
+  "php": 2
 }
