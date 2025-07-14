@@ -12,9 +12,8 @@ export const GALLERY: Gallery[] = [
     type: 'trip',
     title: '颐和园',
     description: `2025年-颐和园游览`,
-    imgSrc:
-      '/static/images/blog/2025/the-summer-palace/F6C218FD-6C16-4ADA-B683-E35B82D93D63_1_102_o.webp',
-    url: '/gallery/2025/the-summer-palace',
+    imgSrc: '/static/images/blog/2025/summer/F6C218FD-6C16-4ADA-B683-E35B82D93D63_1_102_o.webp',
+    url: '/gallery/2025/summer',
   },
 
   // {

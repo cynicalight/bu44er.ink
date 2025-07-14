@@ -9,15 +9,17 @@ import { SITE_METADATA } from '~/data/site-metadata'
 import { PostBanner } from '~/layouts/post-banner'
 import { PostLayout } from '~/layouts/post-layout'
 import { PostSimple } from '~/layouts/post-simple'
+import { GalleryLayout } from '~/layouts/gallery-layout'
 // 导入 Gallery 专用的 MDX 组件
 import { GALLERY_MDX_COMPONENTS } from '~/components/gallery/gallery-mdx'
 import { GalleryContentRenderer } from '~/components/gallery/client-wrapper'
 
-const DEFAULT_LAYOUT = 'PostSimple'
+const DEFAULT_LAYOUT = 'GalleryLayout'
 const LAYOUTS = {
   PostSimple,
   PostLayout,
   PostBanner,
+  GalleryLayout,
 }
 
 export async function generateMetadata({
