@@ -233,7 +233,14 @@ export default makeSource({
           content: icon,
         },
       ],
-      rehypeKatex,
+      [
+        rehypeKatex,
+        {
+          displayMode: false,
+          fleqn: false,
+          strict: false,
+        },
+      ],
       [rehypeCitation, { path: path.join(root, 'data') }],
       [rehypePrismPlus, { defaultLanguage: 'js', ignoreMissing: true }],
       rehypePresetMinify,

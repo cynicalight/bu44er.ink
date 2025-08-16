@@ -100,6 +100,24 @@ module.exports = {
       typography: ({ theme }) => ({
         DEFAULT: {
           css: {
+            fontSize: '1.25rem',
+            lineHeight: '1.4',
+            '--tw-prose-body': theme('colors.black'),
+            '--tw-prose-headings': theme('colors.black'),
+            '--tw-prose-lead': theme('colors.gray.800'),
+            '--tw-prose-links': theme('colors.primary.500'),
+            '--tw-prose-bold': theme('colors.black'),
+            '--tw-prose-counters': theme('colors.gray.600'),
+            '--tw-prose-bullets': theme('colors.gray.400'),
+            '--tw-prose-hr': theme('colors.gray.200'),
+            '--tw-prose-quotes': theme('colors.black'),
+            '--tw-prose-quote-borders': theme('colors.gray.200'),
+            '--tw-prose-captions': theme('colors.gray.600'),
+            '--tw-prose-code': theme('colors.indigo.500'),
+            '--tw-prose-pre-code': theme('colors.gray.200'),
+            '--tw-prose-pre-bg': theme('colors.gray.800'),
+            '--tw-prose-th-borders': theme('colors.gray.300'),
+            '--tw-prose-td-borders': theme('colors.gray.200'),
             a: {
               color: theme('colors.primary.500'),
               'text-underline-offset': '4px',
@@ -111,11 +129,30 @@ module.exports = {
             'h1,h2,h3,h4,h5,h6': {
               scrollMarginTop: '6rem',
             },
-            'h1,h2': {
-              fontWeight: '700',
+            h1: {
+              fontSize: '2.5rem',
+              fontWeight: '800',
+              letterSpacing: theme('letterSpacing.tight'),
+            },
+            h2: {
+              fontSize: '2.3rem',
+              fontWeight: '800',
               letterSpacing: theme('letterSpacing.tight'),
             },
             h3: {
+              fontSize: '1.8rem',
+              fontWeight: '800',
+            },
+            h4: {
+              fontSize: '1.7rem',
+              fontWeight: '800',
+            },
+            h5: {
+              fontSize: '1.25rem',
+              fontWeight: '700',
+            },
+            h6: {
+              fontSize: '1.125rem',
               fontWeight: '600',
             },
             pre: {
@@ -127,15 +164,9 @@ module.exports = {
               color: theme('colors.indigo.500'),
               fontWeight: '500',
             },
-            '.image-container': {
-              width: 'fit-content',
-              marginLeft: 'auto',
-              marginRight: 'auto',
-              borderRadius: '0.5rem',
-              img: {
-                marginTop: 0,
-                marginBottom: 0,
-              },
+            strong: {
+              color: '#c80000eb',
+              fontWeight: '800',
             },
             '.markdown-alert': {
               'p.markdown-alert-title': {
@@ -151,8 +182,58 @@ module.exports = {
             },
           },
         },
+        lg: {
+          css: {
+            fontSize: '1.25rem',
+            lineHeight: '1.4',
+            h1: {
+              fontSize: '2.5rem !important',
+              fontWeight: '780 !important',
+              letterSpacing: theme('letterSpacing.tight'),
+            },
+            h2: {
+              fontSize: '2.3rem !important',
+              fontWeight: '740 !important',
+              letterSpacing: theme('letterSpacing.tight'),
+            },
+            h3: {
+              fontSize: '1.8rem !important',
+              fontWeight: '710 !important',
+            },
+            h4: {
+              fontSize: '1.7rem !important',
+              fontWeight: '700 !important',
+            },
+            h5: {
+              fontSize: '1.25rem !important',
+              fontWeight: '700 !important',
+            },
+            h6: {
+              fontSize: '1.125rem !important',
+              fontWeight: '600 !important',
+            },
+          },
+        },
         invert: {
           css: {
+            fontSize: '1.3rem',
+            lineHeight: '1.4',
+            '--tw-prose-body': theme('colors.gray.200'),
+            '--tw-prose-headings': theme('colors.white'),
+            '--tw-prose-lead': theme('colors.gray.300'),
+            '--tw-prose-links': theme('colors.primary.400'),
+            '--tw-prose-bold': theme('colors.white'),
+            '--tw-prose-counters': theme('colors.gray.400'),
+            '--tw-prose-bullets': theme('colors.gray.600'),
+            '--tw-prose-hr': theme('colors.gray.700'),
+            '--tw-prose-quotes': theme('colors.white'),
+            '--tw-prose-quote-borders': theme('colors.gray.700'),
+            '--tw-prose-captions': theme('colors.gray.400'),
+            '--tw-prose-code': theme('colors.primary.400'),
+            '--tw-prose-pre-code': theme('colors.gray.300'),
+            '--tw-prose-pre-bg': theme('colors.gray.800'),
+            '--tw-prose-th-borders': theme('colors.gray.600'),
+            '--tw-prose-td-borders': theme('colors.gray.700'),
             a: {
               color: theme('colors.primary.400'),
               '&:hover': {
@@ -163,7 +244,35 @@ module.exports = {
             code: {
               color: theme('colors.primary.400'),
             },
+            strong: {
+              color: '#ff6b6b',
+              fontWeight: '800',
+            },
             'h1,h2,h3,h4,h5,h6': {
+              color: theme('colors.gray.100'),
+            },
+            h1: {
+              fontSize: '2.5rem',
+              color: theme('colors.gray.100'),
+            },
+            h2: {
+              fontSize: '2.3rem',
+              color: theme('colors.gray.100'),
+            },
+            h3: {
+              fontSize: '1.8rem',
+              color: theme('colors.gray.100'),
+            },
+            h4: {
+              fontSize: '1.7rem',
+              color: theme('colors.gray.100'),
+            },
+            h5: {
+              fontSize: '1.25rem',
+              color: theme('colors.gray.100'),
+            },
+            h6: {
+              fontSize: '1.125rem',
               color: theme('colors.gray.100'),
             },
           },

@@ -53,22 +53,29 @@ export function TableOfContents({ toc, className }: { toc: TocItem[]; className?
   return (
     <div className={clsx('space-y-4', className)}>
       <h3 className="text-2xl font-semibold">On this page</h3>
-      <ul className="flex flex-col space-y-2">
-        {toc.map(({ value, depth, url }) => (
-          <li
-            key={url}
-            className={clsx([
-              'font-medium',
-              url === `#${activeId}`
-                ? 'text-gray-700 dark:text-gray-200'
-                : 'text-gray-400 hover:text-gray-700 dark:text-gray-500 dark:hover:text-gray-200',
-            ])}
-            style={{ paddingLeft: (depth - 2) * 16 }}
-          >
-            <Link href={url}>{value}</Link>
-          </li>
-        ))}
-      </ul>
+      <div className="toc-scroll max-h-[calc(100vh-200px)] overflow-y-auto scroll-smooth">
+        <ul className="flex flex-col space-y-2 pr-2">
+          {toc.map(({ value, depth, url }) => (
+            <li
+              key={url}
+              className={clsx([
+                'font-medium transition-colors duration-200',
+                url === `#${activeId}`
+                  ? 'text-gray-700 dark:text-gray-200'
+                  : 'text-gray-400 hover:text-gray-700 dark:text-gray-500 dark:hover:text-gray-200',
+              ])}
+              style={{ paddingLeft: (depth - 2) * 16 }}
+            >
+              <Link
+                href={url}
+                className="block rounded px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-800"
+              >
+                {value}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   )
 }
