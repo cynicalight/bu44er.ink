@@ -1,12 +1,11 @@
+'use client'
+
+import { useState, useEffect } from 'react'
 import type { CoreContent } from 'pliny/utils/contentlayer'
 import type { Blog, Snippet } from '~/.contentlayer/generated'
-import { ProfileCard } from '~/components/cards/profile'
 import { Container } from '~/components/ui/container'
-import { Twemoji } from '~/components/ui/twemoji'
 import { Greeting } from './greeting'
-import { Intro } from './intro'
 import { LatestPosts } from './latest-posts'
-import { BlogLinks } from './links'
 import { TypedBios } from './typed-bios'
 
 export function Home({
@@ -16,42 +15,86 @@ export function Home({
   posts: CoreContent<Blog>[]
   snippets: CoreContent<Snippet>[]
 }) {
+  const [showLatestPosts, setShowLatestPosts] = useState(false)
+  const [showScrollHint, setShowScrollHint] = useState(true)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY
+      const threshold = 200 // 滚动超过200px时显示内容
+
+      if (scrollY > threshold) {
+        setShowLatestPosts(true)
+        setShowScrollHint(false)
+      } else {
+        setShowLatestPosts(false)
+        setShowScrollHint(true)
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
   return (
-    <Container as="div" className="pt-4 lg:pt-12">
-      <div className="py-6 md:pb-8 xl:grid xl:grid-cols-3">
-        <div className="space-y-4 md:space-y-6 md:pr-8 xl:col-span-2">
+    <Container as="div" className="pt-0">
+      {/* 主内容区域 - 全宽居中，减少上方空白 */}
+      <div className="relative flex min-h-screen flex-col items-center justify-center py-8">
+        <div className="mx-auto max-w-4xl space-y-8 text-center">
           <Greeting />
-          <div className="text-base leading-7 text-gray-600 dark:text-gray-400 md:text-lg md:leading-8">
-            <Intro />
+          <div className="text-lg leading-8 text-gray-600 dark:text-gray-400 md:text-xl md:leading-9">
             <TypedBios />
-            <div className="mb-6 mt-4 md:mb-8">
-              {/* <p>I started learning to code in 2022.</p> */}
-              {/* <p>I landed my first intern as a network security engineer in 2024.</p> */}
-              {/* <p>I have a passion for web security, web dev and machine learning.</p>
-              <p>I started this blog to document and share my knowledge & experience.</p> */}
-              <p>
+            <div className="mb-6 mt-6 md:mb-8 md:mt-8">
+              {/* <p className="text-xl md:text-2xl leading-relaxed">
                 This is the track of my journey along the way, the path I have paved with my
                 experiences and thoughts.{' '}
-              </p>
-              {/* <p>Every blog post encapsulates the past moments and my insights, bearing witness to my growth and transformation.  </p> */}
+              </p> */}
             </div>
-            <BlogLinks />
-            <p className="my-6 flex md:my-8">
-              <span className="mr-2">Happy reading</span>
-              <Twemoji emoji="clinking-beer-mugs" />
-            </p>
           </div>
         </div>
-        <div className="hidden pl-4 pt-8 xl:block">
-          <ProfileCard />
-        </div>
+
+        {/* 首页下拉箭头 滚动提示箭头 - 固定在屏幕底部 */}
+        {showScrollHint && (
+          <div className="fixed bottom-8 left-1/2 z-50 -translate-x-1/2 transform">
+            <div className="flex cursor-pointer flex-col items-center text-gray-500 transition-colors duration-300 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+              <div
+                className="animate-bounce"
+                style={{
+                  animationDuration: '2s',
+                  animationIterationCount: 'infinite',
+                }}
+              >
+                <svg
+                  className="mb-2 h-6 w-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1.5}
+                    d="M19 14l-7 7m0 0l-7-7m7 7V3"
+                  />
+                </svg>
+              </div>
+              <span className="text-sm font-medium opacity-80">More</span>
+            </div>
+          </div>
+        )}
       </div>
-      <LatestPosts posts={posts} snippets={snippets} />
-      {/* {SITE_METADATA.newsletter?.provider && (
-        <div className="flex items-center justify-center py-4 lg:py-10">
-          <NewsletterForm />
-        </div>
-      )} */}
+
+      {/* Latest Posts 内容区域 */}
+      <div
+        className={`transition-all duration-700 ease-in-out ${
+          showLatestPosts
+            ? 'translate-y-0 opacity-100'
+            : 'pointer-events-none translate-y-10 opacity-0'
+        }`}
+      >
+        <LatestPosts posts={posts} snippets={snippets} />
+      </div>
     </Container>
   )
 }

@@ -47,6 +47,9 @@ module.exports = {
         'music-bar-2': 'music-bar-2 .8s linear infinite',
         'music-bar-3': 'music-bar-3 .8s linear infinite',
         'music-bar-4': 'music-bar-4 .8s linear infinite',
+        'gradient-x': 'gradient-x 3s ease infinite',
+        'fade-in-up': 'fade-in-up 0.6s ease-out',
+        'scale-in': 'scale-in 0.5s ease-out',
       },
       boxShadow: {
         demure: 'rgba(0, 0, 0, 0.3) 0 35px 60px -15px',

@@ -8,8 +8,8 @@ import { Twemoji } from '~/components/ui/twemoji'
 function createTypedInstance(el: HTMLElement) {
   return new Typed(el, {
     stringsElement: '#bios',
-    typeSpeed: 40,
-    backSpeed: 10,
+    typeSpeed: 50,
+    backSpeed: 30,
     loop: true,
     backDelay: 1000,
   })
@@ -29,7 +29,7 @@ export function TypedBios() {
   return (
     <div
       className={clsx([
-        'flex min-h-8 items-center gap-0.5',
+        'flex min-h-8 items-center justify-center gap-0.5', // 添加 justify-center 居中对齐
         [
           '[&_.typed-cursor]:inline-block',
           '[&_.typed-cursor]:w-2',
@@ -48,13 +48,14 @@ export function TypedBios() {
         <li>
           I live in <b className="font-medium">Shanghai, China</b>.
         </li>
-        <li>
+        {/* <li>
           I was born in the beautiful <b className="font-medium">Shanghai</b>.
-        </li>
+        </li> */}
         <li>
           My first programming language I learned was <b className="font-medium">C on Arduino</b>.
         </li>
-        <li>I love web development.</li>
+        <li>I love street photography.</li>
+        <li>My favorite band is the Beatles.</li>
         <li>I work mostly with Python.</li>
         <li>
           I'm a dog-person. <Twemoji emoji="dog" />
@@ -62,10 +63,8 @@ export function TypedBios() {
         <li>
           I'm a sport-guy. I love
           <span className="ml-1">
-            <Twemoji emoji="soccer-ball" />,
-            <Twemoji emoji="man-swimming" />,
-            <Twemoji emoji="ping-pong" />,
-            <Twemoji emoji="volleyball" />
+            <Twemoji emoji="badminton" />,
+            <Twemoji emoji="person-running" />.
           </span>
         </li>
       </ul>

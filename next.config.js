@@ -84,6 +84,38 @@ module.exports = () => {
           protocol: 'https',
           hostname: 'm.media-amazon.com', // IMDB movie posters
         },
+        {
+          protocol: 'https',
+          hostname: 'qingwu-oss.oss-cn-heyuan.aliyuncs.com', // 阿里云 OSS
+        },
+        {
+          protocol: 'https',
+          hostname: '*.aliyuncs.com', // 所有阿里云 OSS 域名
+        },
+        {
+          protocol: 'https',
+          hostname: 'cdn.jsdelivr.net', // CDN 图片
+        },
+        {
+          protocol: 'https',
+          hostname: 'raw.githubusercontent.com', // GitHub 原始文件
+        },
+        {
+          protocol: 'https',
+          hostname: 'images.unsplash.com', // Unsplash 图片
+        },
+        {
+          protocol: 'https',
+          hostname: 'picsum.photos', // Lorem Picsum 图片
+        },
+        {
+          protocol: 'http',
+          hostname: '**', // 允许所有 HTTP 图片（开发环境）
+        },
+        {
+          protocol: 'https',
+          hostname: '**', // 允许所有 HTTPS 图片
+        },
       ],
       unoptimized,
     },

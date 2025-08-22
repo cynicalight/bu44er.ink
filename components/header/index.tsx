@@ -9,7 +9,6 @@ import { Link } from '~/components/ui/link'
 import { HEADER_NAV_LINKS } from '~/data/navigation'
 import { Twemoji } from '~/components/ui/twemoji'
 import { SITE_METADATA } from '~/data/site-metadata'
-import { Logo } from './logo'
 import { MobileNav } from './mobile-nav'
 import { MoreLinks } from './more-links'
 import { SearchButton } from './search'
@@ -43,39 +42,54 @@ export function Header() {
     <Container
       as="header"
       className={clsx(
-        'bg-[#727B67]/25 py-2 backdrop-blur dark:bg-[#727B67]/40',
-        'shadow-sm saturate-100 md:rounded-2xl',
-        SITE_METADATA.stickyNav && 'sticky top-2 z-50 lg:top-3'
+        // 现代化背景和毛玻璃效果
+        'border border-gray-200/50 bg-white/80 backdrop-blur-md',
+        'dark:border-gray-800/50 dark:bg-gray-900/80',
+        // 优化阴影效果
+        'shadow-lg shadow-gray-200/20 dark:shadow-gray-900/40',
+        // 圆角和内边距
+        'px-2 py-3 md:rounded-2xl',
+        // 悬停效果
+        'transition-all duration-300 ease-in-out',
+        'hover:shadow-xl hover:shadow-gray-200/30 dark:hover:shadow-gray-900/60',
+        'hover:bg-white/90 dark:hover:bg-gray-900/90',
+        // 粘性定位
+        SITE_METADATA.stickyNav && 'sticky top-3 z-50 lg:top-4'
       )}
     >
-      <div className="flex items-center justify-between gap-3">
-        <Logo />
+      <div className="flex w-full items-center justify-between gap-3">
+        {/* HOME 按钮 */}
+        <Link
+          href="/"
+          className={clsx(
+            'rounded-lg px-4 py-2 text-lg font-bold transition-all duration-200',
+            'hover:bg-gray-100 dark:hover:bg-gray-800',
+            pathname === '/'
+              ? 'bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-white'
+              : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'
+          )}
+        >
+          HOME
+        </Link>
+
         <div className="flex items-center gap-4">
-          <div className="hidden gap-1.5 sm:flex">
+          <div className="hidden gap-2 sm:flex">
             {HEADER_NAV_LINKS.map(({ title, href, emoji }) => {
               const isActive = pathname.startsWith(href)
               return (
-                <Link key={title} href={href} className="px-3 py-1 font-medium">
-                  <GrowingUnderline
-                    className={clsx(isActive && 'bg-[length:100%_50%]')}
-                    data-umami-event={`nav-${href.replace('/', '')}`}
-                  >
-                    {/* <Twemoji emoji={emoji} /> */}
-                    {title}
-                  </GrowingUnderline>
+                <Link
+                  key={title}
+                  href={href}
+                  className={clsx(
+                    'rounded-lg px-4 py-2 font-medium transition-all duration-200',
+                    'hover:bg-gray-100 dark:hover:bg-gray-800',
+                    isActive
+                      ? 'bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-white'
+                      : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'
+                  )}
+                >
+                  <span data-umami-event={`nav-${href.replace('/', '')}`}>{title}</span>
                 </Link>
-                //                 <MenuItem key={href} as="div">
-                //   {({ close }) => (
-                //     <Link
-                //       href={href}
-                //       className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 hover:bg-gray-200 dark:hover:bg-gray-800"
-                //       onClick={close}
-                //     >
-                //       <Twemoji emoji={emoji} />
-                //       <span data-umami-event={`nav-${href.replace('/', '')}`}>{title}</span>
-                //     </Link>
-                //   )}
-                // </MenuItem>
               )
             })}
             <MoreLinks />
@@ -83,9 +97,9 @@ export function Header() {
           <div
             data-orientation="vertical"
             role="separator"
-            className="hidden h-4 w-px shrink-0 bg-gray-200 dark:bg-gray-600 md:block"
+            className="hidden h-5 w-px shrink-0 bg-gray-300/60 dark:bg-gray-600/60 md:block"
           />
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
             <ThemeSwitcher />
             <SearchButton />
             <MobileNav />
