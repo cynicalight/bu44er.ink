@@ -38,8 +38,11 @@ export function Home({
 
   return (
     <Container as="div" className="pt-0">
-      {/* 主内容区域 - 全宽居中，减少上方空白 */}
-      <div className="relative flex min-h-screen flex-col items-center justify-center py-8">
+      {/* 主内容区域 - 全宽居中，稍微偏上显示 */}
+      <div
+        className="relative flex min-h-screen flex-col items-center py-8"
+        style={{ justifyContent: 'center', paddingTop: '15vh', paddingBottom: '25vh' }}
+      >
         <div className="mx-auto max-w-4xl space-y-8 text-center">
           <Greeting />
           <div className="text-lg leading-8 text-gray-600 dark:text-gray-400 md:text-xl md:leading-9">

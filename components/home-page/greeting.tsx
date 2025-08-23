@@ -5,7 +5,7 @@ export function Greeting() {
   return (
     <div
       className={clsx(
-        'font-greeting font-bold', // 修复拼写错误
+        'font-greeting font-extrabold',
         'text-[40px] leading-[56px] md:text-[68px] md:leading-[80px]', // 放大字体尺寸
 
         // 简约的灰色调，统一色系

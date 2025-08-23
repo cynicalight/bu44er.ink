@@ -8,7 +8,7 @@ import { Twemoji } from '~/components/ui/twemoji'
 function createTypedInstance(el: HTMLElement) {
   return new Typed(el, {
     stringsElement: '#bios',
-    typeSpeed: 50,
+    typeSpeed: 80,
     backSpeed: 30,
     loop: true,
     backDelay: 1000,
@@ -44,15 +44,11 @@ export function TypedBios() {
         {/* <li>
           I'm aliased as <span className="font-medium">Xiaoke</span> at work.
         </li> */}
-        <li>I'm a learner, builder, and freedom seeker.</li>
+        <li>
+          My first programming language was <b className="font-medium">C on Arduino</b>.
+        </li>
         <li>
           I live in <b className="font-medium">Shanghai, China</b>.
-        </li>
-        {/* <li>
-          I was born in the beautiful <b className="font-medium">Shanghai</b>.
-        </li> */}
-        <li>
-          My first programming language I learned was <b className="font-medium">C on Arduino</b>.
         </li>
         <li>I love street photography.</li>
         <li>My favorite band is the Beatles.</li>
@@ -67,6 +63,7 @@ export function TypedBios() {
             <Twemoji emoji="person-running" />.
           </span>
         </li>
+        <li>I'm a learner, builder, and freedom seeker.</li>
       </ul>
       <span ref={el} className="text-neutral-900 dark:text-neutral-200" />
     </div>
