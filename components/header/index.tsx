@@ -44,7 +44,7 @@ export function Header() {
       className={clsx(
         // 现代化背景和毛玻璃效果
         'border border-gray-200/50 bg-white/80 backdrop-blur-md',
-        'dark:border-gray-800/50 dark:bg-gray-900/80',
+        'dark:border-gray-800/50 dark:bg-zinc-900',
         // 优化阴影效果
         'shadow-lg shadow-gray-200/20 dark:shadow-gray-900/40',
         // 圆角和内边距
@@ -52,7 +52,7 @@ export function Header() {
         // 悬停效果
         'transition-all duration-300 ease-in-out',
         'hover:shadow-xl hover:shadow-gray-200/30 dark:hover:shadow-gray-900/60',
-        'hover:bg-white/90 dark:hover:bg-gray-900/90',
+        'hover:bg-white/90 dark:hover:bg-zinc-900',
         // 粘性定位
         SITE_METADATA.stickyNav && 'sticky top-3 z-50 lg:top-4'
       )}
@@ -81,7 +81,7 @@ export function Header() {
                   key={title}
                   href={href}
                   className={clsx(
-                    'rounded-lg px-4 py-2 font-medium transition-all duration-200',
+                    'rounded-lg px-4 py-2 font-semibold transition-all duration-200',
                     'hover:bg-gray-100 dark:hover:bg-gray-800',
                     isActive
                       ? 'bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-white'

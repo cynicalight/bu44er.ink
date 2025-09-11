@@ -71,7 +71,15 @@ module.exports = {
       },
       fontFamily: {
         // sans: ['var(--font-nunito)', ...fontFamily.sans],
-        sans: ['var(--font-exo-2)', '"Songti SC"', '"SimSun"', '"STSong"', 'serif', '"宋体"'],
+        sans: [
+          'var(--font-exo-2)',
+          '"Songti TC"',
+          '"Songti SC"',
+          '"SimSun"',
+          '"STSong"',
+          'serif',
+          '"宋体"',
+        ],
         greeting: ['var(--font-playpen-sans)'],
       },
       colors: {
@@ -105,6 +113,7 @@ module.exports = {
           css: {
             fontSize: '1.25rem',
             lineHeight: '1.4',
+            fontWeight: '580',
             '--tw-prose-body': theme('colors.black'),
             '--tw-prose-headings': theme('colors.black'),
             '--tw-prose-lead': theme('colors.gray.800'),
@@ -189,6 +198,7 @@ module.exports = {
           css: {
             fontSize: '1.25rem',
             lineHeight: '1.4',
+            fontWeight: '580',
             h1: {
               fontSize: '2.5rem !important',
               fontWeight: '780 !important',
@@ -221,6 +231,7 @@ module.exports = {
           css: {
             fontSize: '1.3rem',
             lineHeight: '1.4',
+            fontWeight: '580',
             '--tw-prose-body': theme('colors.gray.200'),
             '--tw-prose-headings': theme('colors.white'),
             '--tw-prose-lead': theme('colors.gray.300'),
