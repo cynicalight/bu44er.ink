@@ -12,7 +12,7 @@ import {
   remarkImgToJsx,
 } from 'pliny/mdx-plugins/index.js'
 import remarkGfm from 'remark-gfm'
-import { remarkAlert } from 'remark-github-blockquote-alert'
+import { remarkAlert } from 'remark-github-blockquote-alert' // 自定义 blockquote/admonition/callout 样式
 import remarkMath from 'remark-math'
 // Rehype packages
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
