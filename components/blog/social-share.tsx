@@ -22,13 +22,13 @@ export function SocialShare({ postUrl, title, className }: SocialButtonsProps) {
   return (
     <div className={clsx('flex items-center gap-2 text-white', className)}>
       <span className="hidden text-gray-500 lg:inline">Share:</span>
-      <WeiboShareButton
+      {/* <WeiboShareButton
         url={postUrl}
         title={title}
         className="flex items-center overflow-hidden rounded-full !bg-weibo !px-2 !py-2 text-white hover:opacity-90"
       >
         <Weibo className="h-4 w-4" fill="#fff" />
-      </WeiboShareButton>
+      </WeiboShareButton> */}
       <TwitterShareButton
         url={postUrl}
         title={title}
