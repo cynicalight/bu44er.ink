@@ -114,7 +114,7 @@ module.exports = {
           css: {
             fontSize: '1.25rem',
             lineHeight: '1.4',
-            fontWeight: '580',
+            fontWeight: '520',
             '--tw-prose-body': theme('colors.black'),
             '--tw-prose-headings': theme('colors.black'),
             '--tw-prose-lead': theme('colors.gray.800'),
@@ -199,7 +199,7 @@ module.exports = {
           css: {
             fontSize: '1.25rem',
             lineHeight: '1.4',
-            fontWeight: '580',
+            fontWeight: '520',
             h1: {
               fontSize: '2.5rem !important',
               fontWeight: '780 !important',
@@ -232,7 +232,7 @@ module.exports = {
           css: {
             fontSize: '1.3rem',
             lineHeight: '1.4',
-            fontWeight: '580',
+            fontWeight: '520',
             '--tw-prose-body': theme('colors.gray.200'),
             '--tw-prose-headings': theme('colors.white'),
             '--tw-prose-lead': theme('colors.gray.300'),
