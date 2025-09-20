@@ -115,7 +115,7 @@ module.exports = {
           css: {
             fontSize: '1.25rem',
             lineHeight: '1.4',
-            fontWeight: '520',
+            fontWeight: '530',
             '--tw-prose-body': theme('colors.black'),
             '--tw-prose-headings': theme('colors.black'),
             '--tw-prose-lead': theme('colors.gray.800'),
@@ -200,7 +200,7 @@ module.exports = {
           css: {
             fontSize: '1.25rem',
             lineHeight: '1.4',
-            fontWeight: '520',
+            fontWeight: '530',
             h1: {
               fontSize: '2.5rem !important',
               fontWeight: '780 !important',
@@ -233,9 +233,9 @@ module.exports = {
           css: {
             fontSize: '1.3rem',
             lineHeight: '1.4',
-            fontWeight: '520',
-            '--tw-prose-body': theme('colors.gray.200'),
-            '--tw-prose-headings': theme('colors.white'),
+            fontWeight: '530',
+            '--tw-prose-body': '#DED7CD',
+            '--tw-prose-headings': '#DED7CD',
             '--tw-prose-lead': theme('colors.gray.300'),
             '--tw-prose-links': theme('colors.primary.400'),
             '--tw-prose-bold': theme('colors.white'),
@@ -265,31 +265,31 @@ module.exports = {
               fontWeight: '800',
             },
             'h1,h2,h3,h4,h5,h6': {
-              color: theme('colors.gray.100'),
+              color: '#DED7CD',
             },
             h1: {
               fontSize: '2.5rem',
-              color: theme('colors.gray.100'),
+              color: '#DED7CD',
             },
             h2: {
               fontSize: '2.3rem',
-              color: theme('colors.gray.100'),
+              color: '#DED7CD',
             },
             h3: {
               fontSize: '1.8rem',
-              color: theme('colors.gray.100'),
+              color: '#DED7CD',
             },
             h4: {
               fontSize: '1.7rem',
-              color: theme('colors.gray.100'),
+              color: '#DED7CD',
             },
             h5: {
               fontSize: '1.25rem',
-              color: theme('colors.gray.100'),
+              color: '#DED7CD',
             },
             h6: {
               fontSize: '1.125rem',
-              color: theme('colors.gray.100'),
+              color: '#DED7CD',
             },
           },
         },

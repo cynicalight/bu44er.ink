@@ -8,6 +8,22 @@
   margin-bottom: 0.5em !important;
 }
 
+/* 自定义列表间距 */
+.prose ul {
+  margin-top: 0.25em !important;
+  margin-bottom: 1em !important;
+}
+
+.prose ol {
+  margin-top: 0.25em !important;
+  margin-bottom: 1em !important;
+}
+
+.prose li {
+  margin-top: 0.25em !important;
+  margin-bottom: 0.25em !important;
+}
+
 .task-list-item::before {
   @apply hidden;
 }

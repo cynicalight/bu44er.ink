@@ -52,7 +52,7 @@ export function TableOfContents({ toc, className }: { toc: TocItem[]; className?
 
   return (
     <div className={clsx('space-y-4', className)}>
-      <h3 className="text-2xl font-semibold">On this page</h3>
+      <h3 className="text-2xl font-semibold text-black dark:text-[#DED7CD]">On this page</h3>
       <div className="toc-scroll max-h-[calc(100vh-200px)] overflow-y-auto scroll-smooth">
         <ul className="flex flex-col space-y-2 pr-2">
           {toc.map(({ value, depth, url }) => (
@@ -61,8 +61,8 @@ export function TableOfContents({ toc, className }: { toc: TocItem[]; className?
               className={clsx([
                 'font-medium transition-colors duration-200',
                 url === `#${activeId}`
-                  ? 'text-gray-700 dark:text-gray-200'
-                  : 'text-gray-400 hover:text-gray-700 dark:text-gray-500 dark:hover:text-gray-200',
+                  ? 'text-gray-700 dark:text-[#DED7CD]'
+                  : 'text-gray-400 hover:text-gray-700 dark:text-gray-500 dark:hover:text-[#DED7CD]',
               ])}
               style={{ paddingLeft: (depth - 2) * 16 }}
             >
