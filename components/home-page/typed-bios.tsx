@@ -44,15 +44,16 @@ export function TypedBios() {
         {/* <li>
           I'm aliased as <span className="font-medium">Xiaoke</span> at work.
         </li> */}
+        <li>I work mostly with Python.</li>
+        <li>I love street photography.</li>
         <li>
           My first programming language was <b className="font-medium">C on Arduino</b>.
         </li>
+        <li>My favorite band is the Beatles.</li>
+        <li>Because of La La Land, I fell in love with jazz.</li>
         <li>
           I live in <b className="font-medium">Shanghai, China</b>.
         </li>
-        <li>I love street photography.</li>
-        <li>My favorite band is the Beatles.</li>
-        <li>I work mostly with Python.</li>
         <li>
           I'm a dog-person. <Twemoji emoji="dog" />
         </li>
