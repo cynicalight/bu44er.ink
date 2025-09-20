@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+/* 自定义 h2 标题间距 */
+.prose h2 {
+  margin-top: 1em !important;
+  margin-bottom: 0.5em !important;
+}
+
 .task-list-item::before {
   @apply hidden;
 }
@@ -83,6 +89,14 @@ samp {
   font-family: 'Playwrite AU SA';
   src: url('/fonts/PlaywriteAUSA-Regular.ttf') format('truetype');
   font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'GenWanMin';
+  src: url('/fonts/GenWanMin2TC-R.otf') format('opentype');
+  /* font-weight: 600; */
   font-style: normal;
   font-display: swap;
 }

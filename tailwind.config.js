@@ -72,7 +72,8 @@ module.exports = {
       fontFamily: {
         // sans: ['var(--font-nunito)', ...fontFamily.sans],
         sans: [
-          'var(--font-exo-2)',
+          'var(--font-exo-2)', // 英文备用字体
+          '"GenWanMin"', // 你的自定义字体作为第一优先级
           '"Songti TC"',
           '"Songti SC"',
           '"宋体-繁"',
@@ -157,7 +158,7 @@ module.exports = {
               fontWeight: '800',
             },
             h4: {
-              fontSize: '1.7rem',
+              fontSize: '1.5rem',
               fontWeight: '800',
             },
             h5: {
