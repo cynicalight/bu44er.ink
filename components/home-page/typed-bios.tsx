@@ -66,7 +66,11 @@ export function TypedBios() {
         </li>
         <li>I'm a learner, builder, and freedom seeker.</li>
       </ul>
-      <span ref={el} className="text-neutral-900 dark:text-neutral-200" />
+      <span
+        ref={el}
+        className="text-neutral-900 dark:text-neutral-200"
+        style={{ fontFamily: 'var(--font-exo-2)' }}
+      />
     </div>
   )
 }

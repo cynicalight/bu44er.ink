@@ -117,6 +117,14 @@ samp {
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'SwiftLTPro';
+  src: url('/fonts/SwiftLTPro-Regular.otf') format('opentype');
+  /* font-weight: 700; */
+  font-style: normal;
+  font-display: swap;
+}
+
 /* TOC Scrollbar Styles */
 .toc-scroll {
   scrollbar-width: thin;

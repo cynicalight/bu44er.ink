@@ -72,8 +72,9 @@ module.exports = {
       fontFamily: {
         // sans: ['var(--font-nunito)', ...fontFamily.sans],
         sans: [
+          '"SwiftLTPro"',
           'var(--font-exo-2)', // 英文备用字体
-          '"GenWanMin"', // 你的自定义字体作为第一优先级
+          '"GenWanMin"', // 自定义字体
           '"Songti TC"',
           '"Songti SC"',
           '"宋体-繁"',
@@ -113,9 +114,9 @@ module.exports = {
       typography: ({ theme }) => ({
         DEFAULT: {
           css: {
-            fontSize: '1.25rem',
+            fontSize: '1.3rem',
             lineHeight: '1.4',
-            fontWeight: '530',
+            fontWeight: '550',
             '--tw-prose-body': theme('colors.black'),
             '--tw-prose-headings': theme('colors.black'),
             '--tw-prose-lead': theme('colors.gray.800'),
@@ -158,15 +159,15 @@ module.exports = {
               fontWeight: '800',
             },
             h4: {
-              fontSize: '1.5rem',
+              fontSize: '1.6rem',
               fontWeight: '800',
             },
             h5: {
-              fontSize: '1.25rem',
+              fontSize: '1.5rem',
               fontWeight: '700',
             },
             h6: {
-              fontSize: '1.125rem',
+              fontSize: '1.4rem',
               fontWeight: '600',
             },
             pre: {
@@ -198,9 +199,9 @@ module.exports = {
         },
         lg: {
           css: {
-            fontSize: '1.25rem',
+            fontSize: '1.3rem',
             lineHeight: '1.4',
-            fontWeight: '530',
+            fontWeight: '550',
             h1: {
               fontSize: '2.5rem !important',
               fontWeight: '780 !important',
@@ -220,11 +221,11 @@ module.exports = {
               fontWeight: '700 !important',
             },
             h5: {
-              fontSize: '1.25rem !important',
+              fontSize: '1.5rem !important',
               fontWeight: '700 !important',
             },
             h6: {
-              fontSize: '1.125rem !important',
+              fontSize: '1.4rem !important',
               fontWeight: '600 !important',
             },
           },
@@ -233,7 +234,7 @@ module.exports = {
           css: {
             fontSize: '1.3rem',
             lineHeight: '1.4',
-            fontWeight: '530',
+            fontWeight: '550',
             '--tw-prose-body': '#DED7CD',
             '--tw-prose-headings': '#DED7CD',
             '--tw-prose-lead': theme('colors.gray.300'),
@@ -284,11 +285,11 @@ module.exports = {
               color: '#DED7CD',
             },
             h5: {
-              fontSize: '1.25rem',
+              fontSize: '1.5rem',
               color: '#DED7CD',
             },
             h6: {
-              fontSize: '1.125rem',
+              fontSize: '1.4rem',
               color: '#DED7CD',
             },
           },

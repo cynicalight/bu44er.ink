@@ -12,7 +12,10 @@ export function MoreLinks() {
   return (
     <div className="flex items-center">
       <Menu as="div" className="relative inline-block text-left">
-        <MenuButton aria-label="More links" className="px-3 py-1 font-medium">
+        <MenuButton
+          aria-label="More links"
+          className="px-3 py-1 font-semibold opacity-80 transition-opacity duration-200 hover:opacity-100"
+        >
           <GrowingUnderline data-umami-event="nav-more-links" className="flex items-center gap-1">
             <span>MORE</span>
             <ChevronDown strokeWidth={2.5} size={20} />
