@@ -24,7 +24,7 @@ export function PostCardListView({
           href={`/blog/${slug}`}
           className={clsx([
             'relative block shrink-0',
-            'h-auto w-full md:h-80 md:w-72',
+            'md:h-70 h-auto w-full md:w-80',
             'pb-3 pl-0 pr-3 pt-0',
             'transition-all ease-in-out hover:pb-2 hover:pl-1 hover:pr-2 hover:pt-1',
           ])}
